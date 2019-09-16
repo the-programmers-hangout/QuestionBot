@@ -13,6 +13,7 @@ fun main(args: Array<String>) {
 
             prefix = "$"
             deleteMode = PrefixDeleteMode.Double
+            documentationSortOrder = arrayListOf("core", "utility", "config")
 
             reactToCommands = false
         }
