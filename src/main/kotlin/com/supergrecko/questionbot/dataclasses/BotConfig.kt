@@ -17,11 +17,11 @@ data class BotConfig(
  * Represent a guild
  *
  * @property guild the guild snowflake
- * @property role the required role to use snowflake
+ * @property role the required role name
  * @property count amount of questions asked in this guild
  */
 data class GuildConfig(
-        val guild: String = "<missing id>",
+        val guild: String = "<missing role>",
         val role: String = "<missing id>",
         val count: Int = 0
 )
