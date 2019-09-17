@@ -7,7 +7,7 @@ import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 
-@CommandSet("core")
+@CommandSet("questions")
 fun questionCommands(config: BotConfig) = commands {
     command("ask") {
         description = "Ask the channel a question."
