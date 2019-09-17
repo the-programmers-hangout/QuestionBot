@@ -5,7 +5,7 @@ import me.aberrantfox.kjdautils.api.dsl.Command
 /**
  * Global map to keep track of Command to Permission levels
  */
-val permissions: MutableMap<Command, PermissionLevel> = mutableMapOf()
+private val permissions: MutableMap<Command, PermissionLevel> = mutableMapOf()
 
 /**
  * @property EVERYONE anyone can use this
