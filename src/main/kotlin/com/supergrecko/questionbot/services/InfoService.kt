@@ -11,9 +11,16 @@ import java.awt.Color
 @Service
 class InfoService(private val configuration: BotConfig) {
     private data class Properties(val version: String, val author: String, val repository: String)
+
     private val propFile = Properties::class.java.getResource("/properties.json").readText()
+
     private val project = Gson().fromJson(propFile, Properties::class.java)
 
+    /**
+     * Gets the bot info embed
+     *
+     * @param guild guild which called the function
+     */
     fun infoEmbed(guild: Guild) = embed {
         val self = guild.jda.selfUser
 

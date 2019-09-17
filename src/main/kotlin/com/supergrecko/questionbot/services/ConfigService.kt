@@ -18,6 +18,9 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         discord.configuration.prefix = prefix
     }
 
+    /**
+     * Alias PersistenceService#save
+     */
     fun save() = store.save(config)
 
     /**

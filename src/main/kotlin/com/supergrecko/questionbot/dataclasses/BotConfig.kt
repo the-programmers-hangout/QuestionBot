@@ -5,7 +5,7 @@ import me.aberrantfox.kjdautils.api.annotation.Data
 /**
  * Represent the bot configuration
  *
- * @property owner bot owner snowflake
+ * @property prefix the bot command prefix
  * @property guilds the guilds the bot views
  */
 @Data("config/config.json")

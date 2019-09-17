@@ -5,12 +5,20 @@ import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType
 import me.aberrantfox.kjdautils.internal.command.ConsumptionType
 
+/**
+ * Question argument for commands
+ *
+ * @param name optional override name
+ */
 open class QuestionArg(override val name: String = "Question") : ArgumentType {
     companion object : QuestionArg()
 
     override val examples: ArrayList<String> = arrayListOf("")
+
     override val consumptionType: ConsumptionType = ConsumptionType.Single
+
     override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
+        // TODO: implement
         return ArgumentResult.Single(1)
     }
 }
