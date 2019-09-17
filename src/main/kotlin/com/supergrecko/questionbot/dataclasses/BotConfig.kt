@@ -1,5 +1,7 @@
 package com.supergrecko.questionbot.dataclasses
 
+import me.aberrantfox.kjdautils.api.annotation.Data
+
 /**
  * Represent the bot configuration
  *
@@ -7,6 +9,7 @@ package com.supergrecko.questionbot.dataclasses
  * @property prefix the bot command prefix
  * @property guilds the guilds the bot views
  */
+@Data("config/config.json")
 data class BotConfig(
         val owner: String = "<missing id>",
         val prefix: String = "$",
