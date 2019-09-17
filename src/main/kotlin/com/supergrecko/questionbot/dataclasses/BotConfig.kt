@@ -13,7 +13,6 @@ data class BotConfig(
         var prefix: String = "$",
         val guilds: MutableList<GuildConfig> = mutableListOf()
 ) {
-    fun addGuild(guild: GuildConfig) = guilds.add(guild)
     fun get(id: String) = guilds.firstOrNull { it.guild == id }
     fun removeGuild(id: String) = guilds.removeAll { it.guild == id }
 }
