@@ -2,6 +2,8 @@ package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.BotConfig
+import com.supergrecko.questionbot.extensions.PermissionLevel
+import com.supergrecko.questionbot.extensions.permission
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
@@ -12,6 +14,7 @@ fun questionCommands(config: BotConfig) = commands {
     command("ask") {
         description = "Ask the channel a question."
         requiresGuild = true
+        permission = PermissionLevel.ADMIN
 
         expect(TextChannelArg, SentenceArg)
 
@@ -26,6 +29,7 @@ fun questionCommands(config: BotConfig) = commands {
     command("edit") {
         description = "Edit a question"
         requiresGuild = true
+        permission = PermissionLevel.ADMIN
 
         expect(QuestionArg, SentenceArg)
 
@@ -37,6 +41,7 @@ fun questionCommands(config: BotConfig) = commands {
     command("delete") {
         description = "Delete a question"
         requiresGuild = true
+        permission = PermissionLevel.ADMIN
 
         expect(QuestionArg)
 

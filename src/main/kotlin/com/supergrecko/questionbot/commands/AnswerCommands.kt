@@ -13,6 +13,7 @@ fun answerCommands(config: BotConfig) = commands {
     command("reply") {
         description = "Reply to a question"
         requiresGuild = true
+        permission = PermissionLevel.EVERYONE
 
         expect(QuestionArg, SentenceArg)
 
