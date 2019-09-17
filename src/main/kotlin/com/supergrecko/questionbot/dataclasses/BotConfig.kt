@@ -44,7 +44,8 @@ data class Question(
         var channel: String = "<missing channel>",
         var id: Int = 0,
         val responses: MutableList<Answer> = mutableListOf(),
-        var question: String = "<missing question>"
+        var question: String = "<missing question>",
+        var note: String = ""
 )
 
 /**

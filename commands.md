@@ -19,11 +19,11 @@
 | setrole   | Role                | Set the lowest required role to invoke commands.                  |
 
 ## questions
-| Commands | Arguments         | Description                 |
-| -------- | ----------------- | --------------------------- |
-| ask      | TextChannel, Text | Ask the channel a question. |
-| delete   | Question          | Delete a question           |
-| edit     | Question, Text    | Edit a question             |
+| Commands | Arguments                     | Description                 |
+| -------- | ----------------------------- | --------------------------- |
+| ask      | TextChannel, (Separated|Text) | Ask the channel a question. |
+| delete   | Question                      | Delete a question           |
+| edit     | Question, Text                | Edit a question             |
 
 ## responses
 | Commands | Arguments      | Description         |
