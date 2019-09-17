@@ -46,6 +46,21 @@ data class Question(
         val sender: String = "<missing id>",
         val channel: String = "<missing channel>",
         val id: Int = 0,
-        val responses: MutableList<String> = mutableListOf(),
+        val responses: MutableList<Answer> = mutableListOf(),
         val question: String = "<missing question>"
+)
+
+/**
+ * Represent an answer
+ *
+ * @property sender the uid who sent the answer
+ * @property listed whether the answer has been deleted or not
+ * @property reason if it was deleted: why?
+ * @property answer the answer message id
+ */
+data class Answer(
+        val sender: String = "<missing id>",
+        val listed: Boolean = true,
+        val reason: String = "This answer is still listed.",
+        val answer: String = "<missing message>"
 )
