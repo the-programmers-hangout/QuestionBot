@@ -5,17 +5,14 @@ import me.aberrantfox.kjdautils.api.annotation.Data
 /**
  * Represent the bot configuration
  *
- * @property owner bot owner snowflake
  * @property prefix the bot command prefix
  * @property guilds the guilds the bot views
  */
 @Data("config/config.json")
 data class BotConfig(
-        val owner: String = "<missing id>",
-        val prefix: String = "$",
+        var prefix: String = "$",
         val guilds: MutableList<GuildConfig> = mutableListOf()
 ) {
-    fun addGuild(guild: GuildConfig) = guilds.add(guild)
     fun get(id: String) = guilds.firstOrNull { it.guild == id }
     fun removeGuild(id: String) = guilds.removeAll { it.guild == id }
 }
@@ -28,9 +25,9 @@ data class BotConfig(
  * @property count amount of questions asked in this guild
  */
 data class GuildConfig(
-        val guild: String = "<missing role>",
-        val role: String = "<missing id>",
-        val count: Int = 0,
+        var guild: String = "<missing role>",
+        var role: String = "<missing id>",
+        var count: Int = 0,
         val questions: MutableList<Question> = mutableListOf()
 )
 
@@ -43,11 +40,11 @@ data class GuildConfig(
  * @property question the question which was asked.
  */
 data class Question(
-        val sender: String = "<missing id>",
-        val channel: String = "<missing channel>",
-        val id: Int = 0,
+        var sender: String = "<missing id>",
+        var channel: String = "<missing channel>",
+        var id: Int = 0,
         val responses: MutableList<Answer> = mutableListOf(),
-        val question: String = "<missing question>"
+        var question: String = "<missing question>"
 )
 
 /**
@@ -59,8 +56,8 @@ data class Question(
  * @property answer the answer message id
  */
 data class Answer(
-        val sender: String = "<missing id>",
-        val listed: Boolean = true,
-        val reason: String = "This answer is still listed.",
-        val answer: String = "<missing message>"
+        var sender: String = "<missing id>",
+        var listed: Boolean = true,
+        var reason: String = "This answer is still listed.",
+        var answer: String = "<missing message>"
 )

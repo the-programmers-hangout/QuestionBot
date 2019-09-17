@@ -11,7 +11,6 @@ fun main(args: Array<String>) {
         configure {
             globalPath = "com.supergrecko.questionbot"
 
-            prefix = "$"
             deleteMode = PrefixDeleteMode.Double
             documentationSortOrder = arrayListOf("core", "utility", "config")
 

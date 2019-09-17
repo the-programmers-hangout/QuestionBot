@@ -7,10 +7,9 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
 
 class GuildLeaveListener(private val service: InfoService) {
     @Subscribe
-    fun onMessage(event: GuildLeaveEvent, configuration: BotConfig) {
+    fun onMessage(event: GuildLeaveEvent) {
         with (event) {
 
         }
     }
 }
-

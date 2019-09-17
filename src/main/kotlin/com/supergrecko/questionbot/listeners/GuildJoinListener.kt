@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 
 class GuildJoinListener(private val service: InfoService) {
     @Subscribe
-    fun onMessage(event: GuildJoinEvent, configuration: BotConfig) {
+    fun onMessage(event: GuildJoinEvent) {
         with (event) {
 
         }
