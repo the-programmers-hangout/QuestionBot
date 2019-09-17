@@ -4,13 +4,14 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
+import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 
 @CommandSet("questions")
-fun questionCommands(config: BotConfig) = commands {
+fun questionCommands(config: BotConfig, logService: LogService) = commands {
     command("ask") {
         description = "Ask the channel a question."
         requiresGuild = true
@@ -19,8 +20,8 @@ fun questionCommands(config: BotConfig) = commands {
         expect(TextChannelArg, SentenceArg)
 
         execute {
+            logService.log(it)
             val (id, question) = it.args
-
             // TODO: Implement
             it.respond("Id: $id, Question: $question")
         }
@@ -34,7 +35,8 @@ fun questionCommands(config: BotConfig) = commands {
         expect(QuestionArg, SentenceArg)
 
         execute {
-
+            logService.log(it)
+            it.respond("test")
         }
     }
 
@@ -46,7 +48,7 @@ fun questionCommands(config: BotConfig) = commands {
         expect(QuestionArg)
 
         execute {
-
+            logService.log(it)
         }
     }
 }
