@@ -18,7 +18,7 @@ class InfoService(private val configuration: BotConfig) {
         val self = guild.jda.selfUser
 
         // TODO: add more fields
-        color = Color(0x00bfff)
+        color = Color(0xfb8c00)
         thumbnail = self.effectiveAvatarUrl
         addField(self.fullName(), "QuestionBot")
         addInlineField("Prefix", configuration.prefix)
