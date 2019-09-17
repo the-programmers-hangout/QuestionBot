@@ -18,14 +18,14 @@
 | setprefix | Word                | Sets the bot prefix.                                              |
 | setrole   | Role                | Set the lowest required role to invoke commands.                  |
 
-## ask
+## questions
 | Commands | Arguments         | Description                 |
 | -------- | ----------------- | --------------------------- |
 | ask      | TextChannel, Text | Ask the channel a question. |
 | delete   | Question          | Delete a question           |
 | edit     | Question, Text    | Edit a question             |
 
-## respond
+## responses
 | Commands | Arguments      | Description         |
 | -------- | -------------- | ------------------- |
 | reply    | Question, Text | Reply to a question |
