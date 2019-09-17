@@ -5,7 +5,7 @@ import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.RoleArg
 
 @CommandSet("config")
-fun roleCommand() = commands {
+fun adminCommands() = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
         requiresGuild = true
