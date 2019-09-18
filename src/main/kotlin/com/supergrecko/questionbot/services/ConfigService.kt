@@ -26,7 +26,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param channel the text channel
      */
     fun setLogChannel(guild: String, channel: TextChannelImpl) {
-        config.guilds.find { it.guild == guild }!!.logChannel = channel.id
+        config.guilds.first { it.guild == guild }.logChannel = channel.id
     }
 
     /**
@@ -36,7 +36,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param enabled on / off to enable or disable logging
      */
     fun enableLogging(guildId: String, enabled: Boolean) {
-        config.guilds.find { it.guild == guildId }?.loggingEnabled = enabled
+        config.guilds.first { it.guild == guildId }.loggingEnabled = enabled
     }
 
     /**

@@ -23,6 +23,8 @@ data class BotConfig(
  * @property guild the guild snowflake
  * @property role the required role name
  * @property count amount of questions asked in this guild
+ * @property logChannel the channel to emit logs to
+ * @property loggingEnabled whether logging is enabled or not.
  */
 data class GuildConfig(
         var guild: String = "<missing role>",
@@ -39,7 +41,9 @@ data class GuildConfig(
  * @property sender the uid who sent the question
  * @property channel the channel this was sent to
  * @property id the guild-level question id
+ * @property responses the answers to this question
  * @property question the question which was asked.
+ * @property note the question note, if any
  */
 data class Question(
         var sender: String = "<missing id>",

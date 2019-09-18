@@ -8,13 +8,17 @@ import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.internal.arguments.*
+import me.aberrantfox.kjdautils.internal.arguments.RoleArg
+import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
+import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
+import me.aberrantfox.kjdautils.internal.arguments.MessageArg
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 import java.awt.Color
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@CommandSet("manage")
+@CommandSet("utility")
 fun manageCommands(config: ConfigService, logService: LogService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
@@ -87,9 +91,10 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
         permission = PermissionLevel.ADMIN
 
         expect(OnOffArg)
+
         execute {
             logService.log(it)
-            val isOn = it.args.component1() as Boolean
+            val isOn = it.args.first() as Boolean
 
             config.enableLogging(it.guild?.id!!, isOn)
             config.save()
