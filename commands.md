@@ -11,13 +11,13 @@
 | help     | (Word)    | Display a help menu |
 
 ## manage
-| Commands  | Arguments           | Description                                                       |
-| --------- | ------------------- | ----------------------------------------------------------------- |
-| addanswer | MessageID, Question | Manually add an already existing message as a reply to a question |
-| delanswer | MessageID           | Delete an answer from a question.                                 |
-| setlog    | Word                | Sets the log channel.                                             |
-| setprefix | Word                | Sets the bot prefix.                                              |
-| setrole   | Role                | Set the lowest required role to invoke commands.                  |
+| Commands      | Arguments           | Description                                                       |
+| ------------- | ------------------- | ----------------------------------------------------------------- |
+| addanswer     | MessageID, Question | Manually add an already existing message as a reply to a question |
+| delanswer     | MessageID           | Delete an answer from a question.                                 |
+| setlogchannel | TextChannel         | Sets the log channel.                                             |
+| setprefix     | Word                | Sets the bot prefix.                                              |
+| setrole       | Role                | Set the lowest required role to invoke commands.                  |
 
 ## questions
 | Commands | Arguments                     | Description                 |
