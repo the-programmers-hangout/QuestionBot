@@ -57,6 +57,30 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
         }
     }
 
+    command("setLog") {
+        description = "Sets the log channel."
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(WordArg)
+
+        execute {
+            logService.log(it)
+            config.setLogChannel(it.guild?.id!!, it.args.first() as String)
+            config.save()
+
+            it.respond(embed {
+                color = Color(0xfb8c00)
+                title = "Success!"
+                description = "Log Channel has successfully been updated."
+
+                addInlineField("New Channel", it.args.first() as String)
+                addInlineField("Invoked By", it.author.name)
+                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
+            })
+        }
+    }
+
     command("delanswer") {
         description = "Delete an answer from a question."
         requiresGuild = true

@@ -15,8 +15,10 @@
 | --------- | ------------------- | ----------------------------------------------------------------- |
 | addanswer | MessageID, Question | Manually add an already existing message as a reply to a question |
 | delanswer | MessageID           | Delete an answer from a question.                                 |
+| setLog    | Word                | Sets the log channel.                                             |
 | setprefix | Word                | Sets the bot prefix.                                              |
 | setrole   | Role                | Set the lowest required role to invoke commands.                  |
+| setlog    | ChannelID           | Set the channel to be used for the logs of the bot commands.      |
 
 ## questions
 | Commands | Arguments                     | Description                 |
