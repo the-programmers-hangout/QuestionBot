@@ -10,6 +10,7 @@ import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.internal.arguments.MessageArg
 import me.aberrantfox.kjdautils.internal.arguments.RoleArg
+import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 import java.awt.Color
 import java.time.LocalDateTime
@@ -57,12 +58,12 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
         }
     }
 
-    command("setLog") {
+    command("setlog") {
         description = "Sets the log channel."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(WordArg)
+        expect(TextChannelArg)
 
         execute {
             logService.log(it)
