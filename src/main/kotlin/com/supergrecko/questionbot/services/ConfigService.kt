@@ -30,6 +30,16 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     /**
+     * Set logging to on or off
+     *
+     * @param guildId the id of the guild
+     * @param enabled on / off to enable or disable logging
+     */
+    fun enableLogging(guildId: String, enabled: Boolean) {
+        config.guilds.find { it.guild == guildId }?.loggingEnabled = enabled
+    }
+
+    /**
      * Alias PersistenceService#save
      */
     fun save() = store.save(config)

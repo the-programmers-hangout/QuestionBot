@@ -8,10 +8,7 @@ import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.internal.arguments.MessageArg
-import me.aberrantfox.kjdautils.internal.arguments.RoleArg
-import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 import java.awt.Color
 import java.time.LocalDateTime
@@ -81,6 +78,31 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
             })
             // Log afterwards
             logService.log(it)
+        }
+    }
+
+    command("enablelogging") {
+        description = "Enables / Disables bot logging"
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(OnOffArg)
+        execute {
+            logService.log(it)
+            val isOn = it.args.component1() as Boolean
+
+            config.enableLogging(it.guild?.id!!, isOn)
+            config.save()
+
+            it.respond(embed {
+                color = Color(0xfb8c00)
+                title = "Success!"
+                description = "Logging settings have successfully been updated."
+
+                addInlineField("New Value", if (isOn) "on" else "off")
+                addInlineField("Invoked By", it.author.name)
+                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
+            })
         }
     }
 
