@@ -47,6 +47,10 @@ fun questionCommands(config: ConfigService) = commands {
                     addBlankField(false)
                     addField("Notes:", note)
                 }
+
+                addBlankField(false)
+                // TODO: link the text channel and the reply cmd syntax
+                addField("How to reply?", "todo")
             }
 
             guild.count++
