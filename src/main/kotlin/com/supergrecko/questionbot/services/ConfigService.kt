@@ -4,6 +4,8 @@ import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.dataclasses.GuildConfig
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
+import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
+import me.aberrantfox.kjdautils.internal.arguments.YesNoArg
 import me.aberrantfox.kjdautils.internal.di.PersistenceService
 
 @Service
@@ -17,6 +19,25 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         config.prefix = prefix
         discord.configuration.prefix = prefix
     }
+
+    /**
+     * Set the log channel to be used
+     *
+     * @param channelId the channel id to be used
+     */
+    fun setLogChannel(guild: String, channelId: String) {
+        config.guilds.find { it.guild == guild }?.logChannel = channelId
+    }
+    /**
+     * Set the log channel to be used
+     *
+     * @param guildId the id of the guild
+     * @param enabled on / off to enable or disable logging
+     */
+    fun enableLogging(guildId: String, enabled: Boolean) {
+        config.guilds.find { it.guild == guildId }?.loggingEnabled = enabled
+    }
+
 
     /**
      * Alias PersistenceService#save

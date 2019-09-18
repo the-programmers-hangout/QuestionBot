@@ -11,6 +11,7 @@ import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.internal.arguments.MessageArg
 import me.aberrantfox.kjdautils.internal.arguments.RoleArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.*
 import java.awt.Color
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -51,6 +52,54 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
                 description = "Bot Prefix has successfully been updated."
 
                 addInlineField("New Prefix", it.args.first() as String)
+                addInlineField("Invoked By", it.author.name)
+                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
+            })
+        }
+    }
+
+    command("setlog") {
+        description = "Sets the log channel."
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(TextChannelArg)
+
+        execute {
+            logService.log(it)
+            config.setLogChannel(it.guild?.id!!, it.args.first() as String)
+            config.save()
+
+            it.respond(embed {
+                color = Color(0xfb8c00)
+                title = "Success!"
+                description = "Log Channel has successfully been updated."
+
+                addInlineField("New Channel", it.args.first() as String)
+                addInlineField("Invoked By", it.author.name)
+                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
+            })
+        }
+    }
+    command("enablelogging") {
+        description = "Enables / Disables bot logging"
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(OnOffArg)
+        execute {
+            logService.log(it)
+            val isOn = it.args.component1() as Boolean
+
+            config.enableLogging(it.guild?.id!!, isOn)
+            config.save()
+
+            it.respond(embed {
+                color = Color(0xfb8c00)
+                title = "Success!"
+                description = "Logging settings have successfully been updated."
+
+                addInlineField("New Value", if (isOn) "on" else "off")
                 addInlineField("Invoked By", it.author.name)
                 addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
             })
