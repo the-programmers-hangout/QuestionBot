@@ -30,6 +30,16 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     /**
+     * Set the question channel to be used
+     *
+     * @param guild the guild to edit
+     * @param channel the text channel
+     */
+    fun setQuestionChannel(guild: String, channel: TextChannelImpl) {
+        config.guilds.first { it.guild == guild }.questionChannel = channel.id
+    }
+
+    /**
      * Set logging to on or off
      *
      * @param guildId the id of the guild

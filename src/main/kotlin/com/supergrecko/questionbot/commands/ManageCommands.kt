@@ -58,9 +58,25 @@ fun manageCommands(config: ConfigService) = commands {
     }
 
     command("setchannel") {
+        description = "Sets the question output channel."
+        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
+        expect(TextChannelArg)
+
         execute {
+            config.setQuestionChannel(it.guild?.id!!, it.args.first() as TextChannelImpl)
+            config.save()
+
+            it.respond(embed {
+                color = Color(0xfb8c00)
+                title = "Success!"
+                description = "Questions Channel has successfully been updated."
+
+                addInlineField("New Channel", (it.args.first() as TextChannelImpl).id)
+                addInlineField("Invoked By", it.author.name)
+                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
+            })
         }
     }
 

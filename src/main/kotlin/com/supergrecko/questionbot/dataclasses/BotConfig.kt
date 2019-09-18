@@ -24,13 +24,15 @@ data class BotConfig(
  * @property role the required role name
  * @property count amount of questions asked in this guild
  * @property logChannel the channel to emit logs to
- * @property loggingEnabled whether logging is enabled or not.
+ * @property questionChannel the channel to emit questions to
+ * @property loggingEnabled whether logging is enabled or not
  */
 data class GuildConfig(
         var guild: String = "<missing role>",
         var role: String = "<missing id>",
         var count: Int = 0,
         var logChannel: String = "<missing channel>",
+        var questionChannel: String = "<missing channel>",
         var loggingEnabled: Boolean = true,
         val questions: MutableList<Question> = mutableListOf()
 )
