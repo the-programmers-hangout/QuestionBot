@@ -5,6 +5,7 @@ import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
+import com.supergrecko.questionbot.services.QuestionService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -15,46 +16,24 @@ import net.dv8tion.jda.api.entities.TextChannel
 import java.awt.Color
 
 @CommandSet("core")
-fun questionCommands(config: ConfigService) = commands {
+fun questionCommands(config: ConfigService, questionService: QuestionService) = commands {
     command("ask") {
         description = "Ask the channel a question."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(TextChannelArg, SplitterArg)
+        expect(SplitterArg)
 
         execute {
-            val channel = it.args.first() as TextChannel
-            val (question, note) = it.args[1] as List<*>
+            // Question and Note args
+            val question = (it.args.first() as List<*>).getOrNull(0) as? String
+            val note = (it.args.first() as List<*>).getOrNull(1) as? String
+
             val guild = config.config.guilds.first { c -> c.guild == it.guild?.id }
 
-            guild.questions.add(Question(
-                    sender = it.author.id,
-                    channel = channel.id,
-                    id = guild.count + 1,
-                    question = question as? String ?: "No Question was asked",
-                    note = note as? String ?: ""
-            ))
-
-            val embed = embed {
-                color = Color(0xfb8c00)
-                thumbnail = it.author.effectiveAvatarUrl
-                title = "${it.author.name} has asked a question! (#${guild.count + 1})"
-                description = question as? String
-
-                if (note != null) {
-                    addBlankField(false)
-                    addField("Notes:", note as? String)
-                }
-
-                addBlankField(false)
-                // TODO: link the text channel and the reply cmd syntax
-                addField("How to reply?", "todo")
-            }
-
-            guild.count++
-            config.save()
-            channel.sendMessage(embed).queue()
+            // Add question and send it
+            questionService.addQuestion(it.guild!!, it.author.id, question ?: "No Question", note ?: "")
+            questionService.sendQuestion(it.guild!!, guild.count)
             it.respond("Your question has been asked.")
         }
     }
