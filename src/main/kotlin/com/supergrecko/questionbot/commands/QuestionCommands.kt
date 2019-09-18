@@ -25,8 +25,8 @@ fun questionCommands(config: ConfigService) = commands {
 
         execute {
             val channel = it.args[0] as TextChannel
-            val question = (it.args[1] as List<String?>).getOrNull(0)
-            val note = (it.args[1] as List<String?>).getOrNull(1)
+            val question = (it.args[1] as List<*>).getOrNull(0) as? String
+            val note = (it.args[1] as List<*>).getOrNull(1) as? String
 
             val guild = config.config.guilds.first { c -> c.guild == it.guild?.id }
             guild.questions.add(Question(
