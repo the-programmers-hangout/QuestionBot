@@ -79,7 +79,6 @@ fun manageCommands(config: ConfigService, logService: LogService) = commands {
 
         execute {
             logService.log(it)
-
         }
     }
 }
