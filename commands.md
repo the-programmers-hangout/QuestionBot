@@ -16,7 +16,7 @@
 | addanswer     | MessageID, Question | Manually add an already existing message as a reply to a question |
 | delanswer     | MessageID           | Delete an answer from a question.                                 |
 | enablelogging | On or Off           | Enables / Disables bot logging                                    |
-| setlog        | TextChannel         | Sets the log channel.                                             |
+| setlogchannel | TextChannel         | Sets the log channel.                                             |
 | setprefix     | Word                | Sets the bot prefix.                                              |
 | setrole       | Role                | Set the lowest required role to invoke commands.                  |
 
