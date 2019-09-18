@@ -1,7 +1,6 @@
 package com.supergrecko.questionbot.dataclasses
 
 import me.aberrantfox.kjdautils.api.annotation.Data
-import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
 
 /**
  * Represent the bot configuration

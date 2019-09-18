@@ -4,8 +4,6 @@ import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.dataclasses.GuildConfig
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
-import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
-import me.aberrantfox.kjdautils.internal.arguments.YesNoArg
 import me.aberrantfox.kjdautils.internal.di.PersistenceService
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
@@ -32,7 +30,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     /**
-     * Set the log channel to be used
+     * Set logging to on or off
      *
      * @param guildId the id of the guild
      * @param enabled on / off to enable or disable logging
