@@ -5,6 +5,7 @@ import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
+import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -15,7 +16,7 @@ import net.dv8tion.jda.api.entities.TextChannel
 import java.awt.Color
 
 @CommandSet("questions")
-fun questionCommands(config: ConfigService) = commands {
+fun questionCommands(config: ConfigService, logService: LogService) = commands {
     command("ask") {
         description = "Ask the channel a question."
         requiresGuild = true
@@ -24,6 +25,8 @@ fun questionCommands(config: ConfigService) = commands {
         expect(TextChannelArg, SplitterArg)
 
         execute {
+            logService.log(it)
+
             val channel = it.args[0] as TextChannel
             val question = (it.args[1] as List<*>).getOrNull(0) as? String
             val note = (it.args[1] as List<*>).getOrNull(1) as? String
@@ -68,7 +71,8 @@ fun questionCommands(config: ConfigService) = commands {
         expect(QuestionArg, SentenceArg)
 
         execute {
-
+            logService.log(it)
+            it.respond("test")
         }
     }
 
@@ -80,7 +84,7 @@ fun questionCommands(config: ConfigService) = commands {
         expect(QuestionArg)
 
         execute {
-
+            logService.log(it)
         }
     }
 }

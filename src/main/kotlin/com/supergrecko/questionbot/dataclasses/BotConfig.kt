@@ -28,6 +28,7 @@ data class GuildConfig(
         var guild: String = "<missing role>",
         var role: String = "<missing id>",
         var count: Int = 0,
+        var logChannel: String = "<missing channel>",
         val questions: MutableList<Question> = mutableListOf()
 )
 

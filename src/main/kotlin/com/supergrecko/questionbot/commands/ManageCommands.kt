@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
+import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -15,7 +16,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @CommandSet("manage")
-fun manageCommands(config: ConfigService) = commands {
+fun manageCommands(config: ConfigService, logService: LogService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
         requiresGuild = true
@@ -24,6 +25,7 @@ fun manageCommands(config: ConfigService) = commands {
         expect(RoleArg)
 
         execute {
+            logService.log(it)
             val (role) = it.args
 
             // TODO: Implement it
@@ -39,6 +41,7 @@ fun manageCommands(config: ConfigService) = commands {
         expect(WordArg)
 
         execute {
+            logService.log(it)
             config.setPrefix(it.args.first() as String)
             config.save()
 
@@ -62,6 +65,7 @@ fun manageCommands(config: ConfigService) = commands {
         expect(MessageArg)
 
         execute {
+            logService.log(it)
 
         }
     }
@@ -74,7 +78,7 @@ fun manageCommands(config: ConfigService) = commands {
         expect(MessageArg, QuestionArg)
 
         execute {
-
+            logService.log(it)
         }
     }
 }

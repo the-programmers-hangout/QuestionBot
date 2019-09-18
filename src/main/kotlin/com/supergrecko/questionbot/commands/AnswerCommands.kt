@@ -4,12 +4,13 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
+import com.supergrecko.questionbot.services.LogService
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 
 @CommandSet("responses")
-fun answerCommands(config: BotConfig) = commands {
+fun answerCommands(config: BotConfig, logService: LogService) = commands {
     command("reply") {
         description = "Reply to a question"
         requiresGuild = true
@@ -18,6 +19,7 @@ fun answerCommands(config: BotConfig) = commands {
         expect(QuestionArg, SentenceArg)
 
         execute {
+            logService.log(it)
 
         }
     }
