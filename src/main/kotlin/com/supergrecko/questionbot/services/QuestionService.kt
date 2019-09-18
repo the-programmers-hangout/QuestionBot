@@ -6,6 +6,7 @@ import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Member
 import java.awt.Color
 
 /**
@@ -29,8 +30,10 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
         guilds = config.config.guilds
     }
 
-    fun getQuestion(guild: Guild, id: Int) {
+    private fun getQuestion(guild: Guild, id: Int): Question {
+        val guildConfig = getGuild(guild.id)
 
+        return guildConfig.questions.first { q -> q.id == id}
     }
 
     /**
@@ -57,6 +60,25 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
     }
 
     /**
+     * Edits a question with the given guild and sends updated question to the given guild
+     *
+     * @param guild the guild to send a question from
+     * @param newQuestion the new question text
+     * @param newNote the new question note
+     */
+    fun editQuestion(guild: Guild, id: Int, newQuestion: String, newNote: String) {
+        val guildConfig = getGuild(guild.id)
+        val question = getQuestion(guild, id)
+        val channel = guild.getTextChannelById(guildConfig.questionChannel) ?: guild.textChannels.first()
+        val author = guild.getMemberById(question.sender) ?: return
+
+        question.question = newQuestion
+        question.note = newNote
+        config.save()
+        channel.editMessageById(question.messageId, createQuestionEmbed(author, question)).queue()
+    }
+
+    /**
      * Sends a question from the given guild
      *
      * @param guild the guild to send a question from
@@ -67,18 +89,24 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
         val question = guildConfig.questions.firstOrNull { it.id == id } ?: return
         val channel = guild.getTextChannelById(guildConfig.questionChannel) ?: guild.textChannels.first()
         val author = guild.getMemberById(question.sender) ?: return
-
-        channel.sendMessage(embed {
-            color = Color(0xfb8c00)
-            thumbnail = author.user.effectiveAvatarUrl
-            title = "${author.fullName()} has asked a question! (#${question.id})"
-            description = question.question
-
-            if (question.note != "") {
-                addField("Notes:", question.note)
-            }
-
-            addField("How to reply:", "todo this")
-        }).queue()
+        channel.sendMessage(createQuestionEmbed(author, question)).queue{ message ->
+            val question = getQuestion(guild, id)
+            question.messageId = message.idLong
+            config.save()
+        }
     }
+
+    private fun createQuestionEmbed(author: Member, question: Question) = embed {
+        color = Color(0xfb8c00)
+        thumbnail = author.user.effectiveAvatarUrl
+        title = "${author.fullName()} has asked a question! (#${question.id})"
+        description = question.question
+
+        if (question.note != "") {
+            addField("Notes:", question.note)
+        }
+
+        addField("How to reply:", "todo this")
+    }
+
 }
