@@ -18,7 +18,7 @@ import me.aberrantfox.kjdautils.internal.command.Pass
 fun canInvoke(config: ConfigService) = precondition {
     val role = config.config.guilds.first { e -> e.guild == it.guild!!.id }.role
     // Determine if user has role
-    val admin = it.message.member?.roles?.filter { r -> r.name == role }?.isNotEmpty()
+    val admin = it.message.member?.roles?.any { r -> r.name == role }
 
     val perm: PermissionLevel = if (admin != true)
         PermissionLevel.EVERYONE else

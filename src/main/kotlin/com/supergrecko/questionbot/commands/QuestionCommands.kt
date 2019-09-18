@@ -15,7 +15,7 @@ import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 import net.dv8tion.jda.api.entities.TextChannel
 import java.awt.Color
 
-@CommandSet("questions")
+@CommandSet("core")
 fun questionCommands(config: ConfigService, logService: LogService) = commands {
     command("ask") {
         description = "Ask the channel a question."
@@ -27,28 +27,27 @@ fun questionCommands(config: ConfigService, logService: LogService) = commands {
         execute {
             logService.log(it)
 
-            val channel = it.args[0] as TextChannel
-            val question = (it.args[1] as List<*>).getOrNull(0) as? String
-            val note = (it.args[1] as List<*>).getOrNull(1) as? String
-
+            val channel = it.args.first() as TextChannel
+            val (question, note) = it.args[1] as List<*>
             val guild = config.config.guilds.first { c -> c.guild == it.guild?.id }
+
             guild.questions.add(Question(
                     sender = it.author.id,
                     channel = channel.id,
                     id = guild.count + 1,
-                    question = question ?: "No Question was asked",
-                    note = note ?: ""
+                    question = question as? String ?: "No Question was asked",
+                    note = note as? String ?: ""
             ))
 
             val embed = embed {
                 color = Color(0xfb8c00)
                 thumbnail = it.author.effectiveAvatarUrl
                 title = "${it.author.name} has asked a question! (#${guild.count + 1})"
-                description = question
+                description = question as? String
 
                 if (note != null) {
                     addBlankField(false)
-                    addField("Notes:", note)
+                    addField("Notes:", note as? String)
                 }
 
                 addBlankField(false)
