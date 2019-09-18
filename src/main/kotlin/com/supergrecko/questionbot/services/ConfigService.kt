@@ -19,6 +19,15 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     /**
+     * Set the log channel to be used
+     *
+     * @param channelId the new prefix
+     */
+    fun setLogChannel(guild: String, channelId: String) {
+        config.guilds.find { it.guild == guild }?.logChannel = channelId
+    }
+
+    /**
      * Alias PersistenceService#save
      */
     fun save() = store.save(config)
