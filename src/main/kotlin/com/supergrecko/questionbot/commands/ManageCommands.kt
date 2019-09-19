@@ -9,6 +9,7 @@ import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.arguments.*
+import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("manage")
@@ -21,8 +22,11 @@ fun manageCommands(config: ConfigService) = commands {
         expect(RoleArg)
 
         execute {
-            // TODO: Implement it
-            it.respond(it.args.first().toString())
+            val args = Arguments(it.args)
+            val role = args.asType<RoleImpl>(0)
+            config.setAdminRole(it.guild!!.id, role!!.name)
+
+            it.respond("Success, the minimum required role to invoke admin commands was set to `${role.name}`.")
         }
     }
 
@@ -36,7 +40,6 @@ fun manageCommands(config: ConfigService) = commands {
         execute {
             val prefix = it.args.first() as String
             config.setPrefix(prefix)
-            config.save()
 
             it.respond("Success, the bot prefix has been set to `$prefix`.")
         }

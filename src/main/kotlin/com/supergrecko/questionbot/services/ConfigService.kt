@@ -32,6 +32,14 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     fun setPrefix(prefix: String = config.prefix) {
         config.prefix = prefix
         discord.configuration.prefix = prefix
+
+        save()
+    }
+
+    fun setAdminRole(guild: String, role: String) {
+        getGuild(guild).config.role = role
+
+        save()
     }
 
     fun getGuild(guild: String): QGuild {

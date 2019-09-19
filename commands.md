@@ -17,7 +17,6 @@
 | delanswer     | MessageID              | Delete an answer from a question.                                 |
 | enablelogging | On or Off              | Enables / Disables bot logging                                    |
 | setchannel    | ChoiceArg, TextChannel | Sets the output channel for the given argument.                   |
-| setchannel2   | TextChannel            | Sets the question output channel.                                 |
 | setprefix     | Word                   | Sets the bot prefix.                                              |
 | setrole       | Role                   | Set the lowest required role to invoke commands.                  |
 
