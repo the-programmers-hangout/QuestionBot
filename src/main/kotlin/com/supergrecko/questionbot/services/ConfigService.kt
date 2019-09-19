@@ -43,6 +43,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      */
     fun setLogChannel(guild: String, channel: TextChannelImpl) {
         getConfig(guild).logChannel = channel.id
+        save()
     }
 
     /**
@@ -53,6 +54,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      */
     fun setQuestionChannel(guild: String, channel: TextChannelImpl) {
         getConfig(guild).questionChannel = channel.id
+        save()
     }
 
     /**
@@ -63,6 +65,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      */
     fun enableLogging(guild: String, enabled: Boolean) {
         getConfig(guild).loggingEnabled = enabled
+        save()
     }
 
     /**
