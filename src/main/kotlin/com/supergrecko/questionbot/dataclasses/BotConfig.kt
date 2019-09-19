@@ -23,21 +23,32 @@ data class BotConfig(
  * @property guild the guild snowflake
  * @property role the required role name
  * @property count amount of questions asked in this guild
- * @property logChannel the channel to emit logs to
- * @property questionChannel the channel to emit questions to
+ * @property channels the channels to output to
  * @property loggingEnabled whether logging is enabled or not
  */
 data class GuildConfig(
-        var guild: String = "<missing role>",
-        var role: String = "<missing id>",
+        var guild: String = "",
+        var role: String = "",
         var count: Int = 0,
-        var logChannel: String = "<missing channel>",
-        var questionChannel: String = "<missing channel>",
+        val channels: GuildChannels = GuildChannels(),
         var loggingEnabled: Boolean = true,
         val questions: MutableList<Question> = mutableListOf()
 ) {
     fun addQuestion(question: Question) = questions.add(question)
 }
+
+/**
+ * Represent the output channels
+ *
+ * @property logs the channel where logs are sent
+ * @property questions the channel where questions are sent
+ * @property answers the channel where answers are sent
+ */
+data class GuildChannels(
+        var logs: String = "0",
+        var questions: String = "0",
+        var answers: String = "0"
+)
 
 /**
  * Represent a question
@@ -50,13 +61,13 @@ data class GuildConfig(
  * @property note the question note, if any
  */
 data class Question(
-        var sender: String = "<missing id>",
-        var channel: String = "<missing channel>",
+        var sender: String = "",
+        var channel: String = "",
         var id: Int = 0,
         val responses: MutableList<Answer> = mutableListOf(),
-        var question: String = "<missing question>",
+        var question: String = "",
         var note: String = "",
-        var message: String = "<missing id>"
+        var message: String = ""
 ) {
     fun update(question: String, note: String) {
         this.note = note
@@ -70,11 +81,13 @@ data class Question(
  * @property sender the uid who sent the answer
  * @property listed whether the answer has been deleted or not
  * @property reason if it was deleted: why?
- * @property answer the answer message id
+ * @property invocation the message id for the command invocation
+ * @property embed the message id for the reply embed
  */
 data class Answer(
-        var sender: String = "<missing id>",
+        var sender: String = "",
         var listed: Boolean = true,
         var reason: String = "This answer is still listed.",
-        var answer: String = "<missing message>"
+        var invocation: String = "",
+        var embed: String = ""
 )
