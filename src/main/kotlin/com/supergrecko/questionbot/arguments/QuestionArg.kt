@@ -18,6 +18,13 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
 
     override val consumptionType: ConsumptionType = ConsumptionType.Single
 
+    /**
+     * Gets a question id and tests if the guild has a question tagged with this ID.
+     *
+     * @param arg the argument
+     * @param args the other arguments
+     * @param event the command invocation
+     */
     override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
         val config = getGuild(event.guild?.id)
 
