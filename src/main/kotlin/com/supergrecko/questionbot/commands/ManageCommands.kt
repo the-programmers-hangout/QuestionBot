@@ -7,16 +7,12 @@ import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
-import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.internal.arguments.RoleArg
 import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
 import me.aberrantfox.kjdautils.internal.arguments.MessageArg
 import net.dv8tion.jda.internal.entities.TextChannelImpl
-import java.awt.Color
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @CommandSet("manage")
 fun manageCommands(config: ConfigService) = commands {
@@ -41,18 +37,11 @@ fun manageCommands(config: ConfigService) = commands {
         expect(WordArg)
 
         execute {
-            config.setPrefix(it.args.first() as String)
+            val prefix = it.args.first() as String
+            config.setPrefix(prefix)
             config.save()
 
-            it.respond(embed {
-                color = Color(0xfb8c00)
-                title = "Success!"
-                description = "Bot Prefix has successfully been updated."
-
-                addInlineField("New Prefix", it.args.first() as String)
-                addInlineField("Invoked By", it.author.name)
-                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
-            })
+            it.respond("Success, the bot prefix has been set to `$prefix`.")
         }
     }
 
@@ -69,15 +58,7 @@ fun manageCommands(config: ConfigService) = commands {
 
             config.setQuestionChannel(it.guild?.id!!, channel!!)
 
-            it.respond(embed {
-                color = Color(0xfb8c00)
-                title = "Success!"
-                description = "Questions Channel has successfully been updated."
-
-                addInlineField("New Channel", (it.args.first() as TextChannelImpl).id)
-                addInlineField("Invoked By", it.author.name)
-                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
-            })
+            it.respond("Success, the question output channel has been set to ${channel.asMention}.")
         }
     }
 
@@ -94,15 +75,7 @@ fun manageCommands(config: ConfigService) = commands {
 
             config.setLogChannel(it.guild?.id!!, channel!!)
 
-            it.respond(embed {
-                color = Color(0xfb8c00)
-                title = "Success!"
-                description = "Log Channel has successfully been updated."
-
-                addInlineField("New Channel", (it.args.first() as TextChannelImpl).id)
-                addInlineField("Invoked By", it.author.name)
-                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
-            })
+            it.respond("Success, the log output channel has been set to ${channel.asMention}.")
         }
     }
 
@@ -119,15 +92,7 @@ fun manageCommands(config: ConfigService) = commands {
 
             config.enableLogging(it.guild?.id!!, isOn)
 
-            it.respond(embed {
-                color = Color(0xfb8c00)
-                title = "Success!"
-                description = "Logging settings have successfully been updated."
-
-                addInlineField("New Value", if (isOn) "on" else "off")
-                addInlineField("Invoked By", it.author.name)
-                addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
-            })
+            it.respond("Success, logging settings have successfully been updated.")
         }
     }
 
