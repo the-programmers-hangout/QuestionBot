@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.dataclasses.GuildConfig
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
+import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
@@ -24,16 +25,10 @@ fun getGuild(id: String?): GuildConfig {
 }
 
 @Service
-class QuestionService(val config: ConfigService, val logger: LogService) {
+class QuestionService(val config: ConfigService) {
     init {
         // Hacky way to extract guilds from service
         guilds = config.config.guilds
-    }
-
-    private fun getQuestion(guild: Guild, id: Int): Question {
-        val guildConfig = getGuild(guild.id)
-
-        return guildConfig.questions.first { q -> q.id == id}
     }
 
     /**
@@ -45,17 +40,17 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
      * @param note the note, if any
      */
     fun addQuestion(guild: Guild, sender: String, question: String, note: String = "") {
-        val guildConfig = getGuild(guild.id)
+        val state = config.getGuild(guild.id)
 
-        guildConfig.questions.add(Question(
+        state.config.addQuestion(Question(
                 sender = sender,
-                channel = guildConfig.questionChannel,
-                id = guildConfig.count + 1,
+                channel = state.config.questionChannel,
+                id = state.config.count + 1,
                 question = question,
                 note = note
         ))
 
-        guildConfig.count++
+        state.config.count++
         config.save()
     }
 
@@ -67,15 +62,15 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
      * @param newNote the new question note
      */
     fun editQuestion(guild: Guild, id: Int, newQuestion: String, newNote: String) {
-        val guildConfig = getGuild(guild.id)
-        val question = getQuestion(guild, id)
-        val channel = guild.getTextChannelById(guildConfig.questionChannel) ?: guild.textChannels.first()
-        val author = guild.getMemberById(question.sender) ?: return
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(id)
 
-        question.question = newQuestion
-        question.note = newNote
+        val channel = guild.getTextChannelById(state.config.questionChannel) ?: guild.textChannels.first()
+
+        question.update(newQuestion, newNote)
         config.save()
-        channel.editMessageById(question.messageId, createQuestionEmbed(author, question)).queue()
+
+        channel.editMessageById(question.message, getEmbed(state, question)).queue()
     }
 
     /**
@@ -85,20 +80,29 @@ class QuestionService(val config: ConfigService, val logger: LogService) {
      * @param id the question id to send
      */
     fun sendQuestion(guild: Guild, id: Int) {
-        val guildConfig = getGuild(guild.id)
-        val question = guildConfig.questions.firstOrNull { it.id == id } ?: return
-        val channel = guild.getTextChannelById(guildConfig.questionChannel) ?: guild.textChannels.first()
-        val author = guild.getMemberById(question.sender) ?: return
-        channel.sendMessage(createQuestionEmbed(author, question)).queue{ message ->
-            val question = getQuestion(guild, id)
-            question.messageId = message.idLong
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(id)
+
+        val channel = guild.getTextChannelById(state.config.questionChannel) ?: guild.textChannels.first()
+
+        channel.sendMessage(getEmbed(state, question)).queue {
+            state.getQuestion(id).message = it.id
             config.save()
         }
     }
 
-    private fun createQuestionEmbed(author: Member, question: Question) = embed {
+    /**
+     * Generate the RichEmbed for the given question
+     *
+     * @param state the guild to pull data from
+     * @param question the question
+     */
+    private fun getEmbed(state: QGuild, question: Question) = embed {
+        val author = state.guild.getMemberById(question.sender)!!
+
         color = Color(0xfb8c00)
         thumbnail = author.user.effectiveAvatarUrl
+
         title = "${author.fullName()} has asked a question! (#${question.id})"
         description = question.question
 

@@ -2,10 +2,19 @@ package com.supergrecko.questionbot.services
 
 import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.dataclasses.GuildConfig
+import com.supergrecko.questionbot.services.getGuild as getConfig
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.internal.di.PersistenceService
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.internal.entities.TextChannelImpl
+
+data class QGuild(
+        val config: GuildConfig,
+        val guild: Guild
+) {
+    fun getQuestion(id: Int) = config.questions.first { it.id == id }
+}
 
 @Service
 open class ConfigService(val config: BotConfig, private val discord: Discord, private val store: PersistenceService) {
@@ -19,6 +28,13 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         discord.configuration.prefix = prefix
     }
 
+    fun getGuild(guild: String): QGuild {
+        return QGuild(
+                guild = discord.jda.getGuildById(guild)!!,
+                config = getConfig(guild)
+        )
+    }
+
     /**
      * Set the log channel to be used
      *
@@ -26,7 +42,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param channel the text channel
      */
     fun setLogChannel(guild: String, channel: TextChannelImpl) {
-        config.guilds.first { it.guild == guild }.logChannel = channel.id
+        getConfig(guild).logChannel = channel.id
     }
 
     /**
@@ -36,17 +52,17 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param channel the text channel
      */
     fun setQuestionChannel(guild: String, channel: TextChannelImpl) {
-        config.guilds.first { it.guild == guild }.questionChannel = channel.id
+        getConfig(guild).questionChannel = channel.id
     }
 
     /**
      * Set logging to on or off
      *
-     * @param guildId the id of the guild
+     * @param guild the id of the guild
      * @param enabled on / off to enable or disable logging
      */
-    fun enableLogging(guildId: String, enabled: Boolean) {
-        config.guilds.first { it.guild == guildId }.loggingEnabled = enabled
+    fun enableLogging(guild: String, enabled: Boolean) {
+        getConfig(guild).loggingEnabled = enabled
     }
 
     /**
@@ -64,7 +80,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     fun registerGuilds() {
         // TODO: find better algo than O(n^2)
         val unsaved = discord.jda.guilds.filter { guild ->
-            config.guilds.filter { it.guild == guild.id }.isEmpty()
+            config.guilds.none { it.guild == guild.id }
         }
 
         unsaved.forEach {
@@ -84,5 +100,6 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         val item = config.guilds.filter { it.guild == guild }
 
         config.guilds.removeAll(item)
+        save()
     }
 }
