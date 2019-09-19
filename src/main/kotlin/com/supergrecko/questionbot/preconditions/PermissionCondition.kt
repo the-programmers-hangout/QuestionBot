@@ -14,12 +14,13 @@ import me.aberrantfox.kjdautils.internal.command.Pass
  * based on their role and the commands permission level
  *
  * @param config dependency injected config
+ * @param logger dependency injected logger
  */
 @Precondition
 fun canInvoke(config: ConfigService, logger: LogService) = precondition {
-    val role = config.config.guilds.first { e -> e.guild == it.guild!!.id }.role
-    // Determine if user has role
-    val admin = it.message.member?.roles?.any { r -> r.name == role }
+    val state = config.getGuild(it.guild!!.id)
+
+    val admin = it.message.member?.roles?.any { r -> r.name == state.config.role }
 
     val perm: PermissionLevel = if (admin != true)
         PermissionLevel.EVERYONE else

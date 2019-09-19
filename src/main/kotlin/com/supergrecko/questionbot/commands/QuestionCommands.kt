@@ -15,7 +15,7 @@ import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 import net.dv8tion.jda.api.entities.TextChannel
 import java.awt.Color
 
-@CommandSet("core")
+@CommandSet("ask")
 fun questionCommands(config: ConfigService, questionService: QuestionService) = commands {
     command("ask") {
         description = "Ask the channel a question."

@@ -17,7 +17,7 @@ import java.awt.Color
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@CommandSet("utility")
+@CommandSet("manage")
 fun manageCommands(config: ConfigService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
