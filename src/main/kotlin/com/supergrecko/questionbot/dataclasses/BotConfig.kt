@@ -53,7 +53,8 @@ data class Question(
         var id: Int = 0,
         val responses: MutableList<Answer> = mutableListOf(),
         var question: String = "<missing question>",
-        var note: String = ""
+        var note: String = "",
+        var messageId: Long = 0
 )
 
 /**

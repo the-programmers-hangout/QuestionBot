@@ -43,10 +43,15 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(QuestionArg, SentenceArg)
+        expect(QuestionArg, SplitterArg)
 
         execute {
-            it.respond("test")
+            val question = (it.args.first() as Question)
+            val newText = (it.args.last() as List<*>).getOrNull(0) as? String
+            val newNote = (it.args.last() as List<*>).getOrNull(1) as? String
+
+            questionService.editQuestion(it.guild!!, question.id, newText!!, newNote ?: "")
+            it.respond("Question #${question.id} has been edited.")
         }
     }
 
