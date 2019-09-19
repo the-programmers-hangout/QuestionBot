@@ -4,14 +4,11 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
+import com.supergrecko.questionbot.services.LogChannels
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
-import me.aberrantfox.kjdautils.internal.arguments.RoleArg
-import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
-import me.aberrantfox.kjdautils.internal.arguments.OnOffArg
-import me.aberrantfox.kjdautils.internal.arguments.MessageArg
+import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("manage")
@@ -46,36 +43,26 @@ fun manageCommands(config: ConfigService) = commands {
     }
 
     command("setchannel") {
-        description = "Sets the question output channel."
+        description = "Sets the output channel for the given argument."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(TextChannelArg)
+        expect(ChoiceArg("ChoiceArg", "log", "questions", "answers"), TextChannelArg)
 
         execute {
             val args = Arguments(it.args)
-            val channel = args.asType<TextChannelImpl>(0)
+            val command = args.asType<String>(0)
+            val channel = args.asType<TextChannelImpl>(1)
 
-            config.setQuestionChannel(it.guild?.id!!, channel!!)
+            when (command) {
+                "log" -> config.setChannel(LogChannels.LOG, it.guild?.id!!, channel!!)
+                "questions" -> config.setChannel(LogChannels.QUESTION, it.guild?.id!!, channel!!)
+                "answers" -> config.setChannel(LogChannels.ANSWER, it.guild?.id!!, channel!!)
 
-            it.respond("Success, the question output channel has been set to ${channel.asMention}.")
-        }
-    }
+                else -> return@execute it.respond("Error, the option $command is not valid.")
+            }
 
-    command("setlogchannel") {
-        description = "Sets the log channel."
-        requiresGuild = true
-        permission = PermissionLevel.ADMIN
-
-        expect(TextChannelArg)
-
-        execute {
-            val args = Arguments(it.args)
-            val channel = args.asType<TextChannelImpl>(0)
-
-            config.setLogChannel(it.guild?.id!!, channel!!)
-
-            it.respond("Success, the log output channel has been set to ${channel.asMention}.")
+            it.respond("Success, the $command output channel has been set to ${channel.asMention}.")
         }
     }
 

@@ -11,15 +11,15 @@
 | help     | (Word)    | Display a help menu |
 
 ## manage
-| Commands      | Arguments           | Description                                                       |
-| ------------- | ------------------- | ----------------------------------------------------------------- |
-| addanswer     | MessageID, Question | Manually add an already existing message as a reply to a question |
-| delanswer     | MessageID           | Delete an answer from a question.                                 |
-| enablelogging | On or Off           | Enables / Disables bot logging                                    |
-| setchannel    | TextChannel         | Sets the question output channel.                                 |
-| setlogchannel | TextChannel         | Sets the log channel.                                             |
-| setprefix     | Word                | Sets the bot prefix.                                              |
-| setrole       | Role                | Set the lowest required role to invoke commands.                  |
+| Commands      | Arguments              | Description                                                       |
+| ------------- | ---------------------- | ----------------------------------------------------------------- |
+| addanswer     | MessageID, Question    | Manually add an already existing message as a reply to a question |
+| delanswer     | MessageID              | Delete an answer from a question.                                 |
+| enablelogging | On or Off              | Enables / Disables bot logging                                    |
+| setchannel    | ChoiceArg, TextChannel | Sets the output channel for the given argument.                   |
+| setchannel2   | TextChannel            | Sets the question output channel.                                 |
+| setprefix     | Word                   | Sets the bot prefix.                                              |
+| setrole       | Role                   | Set the lowest required role to invoke commands.                  |
 
 ## ask
 | Commands | Arguments                  | Description                 |
