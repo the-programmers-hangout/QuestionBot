@@ -42,7 +42,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param channel the text channel
      */
     fun setLogChannel(guild: String, channel: TextChannelImpl) {
-        getConfig(guild).logChannel = channel.id
+        getConfig(guild).channels.logs = channel.id
         save()
     }
 
@@ -53,7 +53,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param channel the text channel
      */
     fun setQuestionChannel(guild: String, channel: TextChannelImpl) {
-        getConfig(guild).questionChannel = channel.id
+        getConfig(guild).channels.questions = channel.id
         save()
     }
 

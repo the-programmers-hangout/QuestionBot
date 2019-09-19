@@ -4,10 +4,8 @@ import com.supergrecko.questionbot.dataclasses.GuildConfig
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
 import java.awt.Color
 
 /**
@@ -44,7 +42,7 @@ class QuestionService(val config: ConfigService) {
 
         state.config.addQuestion(Question(
                 sender = sender,
-                channel = state.config.questionChannel,
+                channel = state.config.channels.questions,
                 id = state.config.count + 1,
                 question = question,
                 note = note
@@ -65,7 +63,7 @@ class QuestionService(val config: ConfigService) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(id)
 
-        val channel = guild.getTextChannelById(state.config.questionChannel) ?: guild.textChannels.first()
+        val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
 
         question.update(newQuestion, newNote)
         config.save()
@@ -83,7 +81,7 @@ class QuestionService(val config: ConfigService) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(id)
 
-        val channel = guild.getTextChannelById(state.config.questionChannel) ?: guild.textChannels.first()
+        val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
 
         channel.sendMessage(getEmbed(state, question)).queue {
             state.getQuestion(id).message = it.id

@@ -52,12 +52,12 @@ class LogService(val config: ConfigService) {
     private fun getChannel(event: CommandEvent): TextChannel? {
         val state = config.getGuild(event.guild!!.id)
 
-        if (state.config.logChannel == "<missing channel>") {
+        if (state.config.channels.logs == "") {
             // TODO: implement better way of display no log channel
             event.channel.sendMessage("Log Channel has not been configured. To configure, invoke `\$setlogchannel <channel>`").queue()
             return null
         }
 
-        return event.guild!!.jda.getTextChannelById(state.config.logChannel)
+        return event.guild!!.jda.getTextChannelById(state.config.channels.logs)
     }
 }
