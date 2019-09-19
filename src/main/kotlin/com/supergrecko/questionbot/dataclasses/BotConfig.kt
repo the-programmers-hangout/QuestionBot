@@ -35,7 +35,9 @@ data class GuildConfig(
         var questionChannel: String = "<missing channel>",
         var loggingEnabled: Boolean = true,
         val questions: MutableList<Question> = mutableListOf()
-)
+) {
+    fun addQuestion(question: Question) = questions.add(question)
+}
 
 /**
  * Represent a question
@@ -54,8 +56,13 @@ data class Question(
         val responses: MutableList<Answer> = mutableListOf(),
         var question: String = "<missing question>",
         var note: String = "",
-        var messageId: Long = 0
-)
+        var message: String = "<missing id>"
+) {
+    fun update(question: String, note: String) {
+        this.note = note
+        this.question = question
+    }
+}
 
 /**
  * Represent an answer
