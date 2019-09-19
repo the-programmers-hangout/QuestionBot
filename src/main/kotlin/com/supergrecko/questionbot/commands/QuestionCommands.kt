@@ -6,16 +6,12 @@ import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.services.QuestionService
+import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
-import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 import me.aberrantfox.kjdautils.internal.arguments.SplitterArg
-import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
-import net.dv8tion.jda.api.entities.TextChannel
-import java.awt.Color
 
-@CommandSet("core")
+@CommandSet("ask")
 fun questionCommands(config: ConfigService, questionService: QuestionService) = commands {
     command("ask") {
         description = "Ask the channel a question."
@@ -25,15 +21,14 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         expect(SplitterArg)
 
         execute {
-            // Question and Note args
-            val question = (it.args.first() as List<*>).getOrNull(0) as? String
-            val note = (it.args.first() as List<*>).getOrNull(1) as? String
+            val state = config.getGuild(it.guild!!.id)
+            val args = Arguments(it.args)
 
-            val guild = config.config.guilds.first { c -> c.guild == it.guild?.id }
+            val (question, note) = args.fromList<String>(0, 0, 1)
 
             // Add question and send it
             questionService.addQuestion(it.guild!!, it.author.id, question ?: "No Question", note ?: "")
-            questionService.sendQuestion(it.guild!!, guild.count)
+            questionService.sendQuestion(it.guild!!, state.config.count)
             it.respond("Your question has been asked.")
         }
     }
@@ -46,12 +41,12 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         expect(QuestionArg, SplitterArg)
 
         execute {
-            val question = (it.args.first() as Question)
-            val newText = (it.args.last() as List<*>).getOrNull(0) as? String
-            val newNote = (it.args.last() as List<*>).getOrNull(1) as? String
+            val args = Arguments(it.args)
+            val id = args.asType<Question>(0)
+            val (question, note) = args.fromList<String>(1, 0, 1)
 
-            questionService.editQuestion(it.guild!!, question.id, newText!!, newNote ?: "")
-            it.respond("Question #${question.id} has been edited.")
+            questionService.editQuestion(it.guild!!, id!!.id, question ?: "No question was asked.", note ?: "")
+            it.respond("Question #${id.id} has been edited.")
         }
     }
 

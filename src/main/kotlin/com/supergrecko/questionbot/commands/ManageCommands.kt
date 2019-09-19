@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
+import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -17,7 +18,7 @@ import java.awt.Color
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@CommandSet("utility")
+@CommandSet("manage")
 fun manageCommands(config: ConfigService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
@@ -27,10 +28,8 @@ fun manageCommands(config: ConfigService) = commands {
         expect(RoleArg)
 
         execute {
-            val (role) = it.args
-
             // TODO: Implement it
-            it.respond(role.toString())
+            it.respond(it.args.first().toString())
         }
     }
 
@@ -65,8 +64,10 @@ fun manageCommands(config: ConfigService) = commands {
         expect(TextChannelArg)
 
         execute {
-            config.setQuestionChannel(it.guild?.id!!, it.args.first() as TextChannelImpl)
-            config.save()
+            val args = Arguments(it.args)
+            val channel = args.asType<TextChannelImpl>(0)
+
+            config.setQuestionChannel(it.guild?.id!!, channel!!)
 
             it.respond(embed {
                 color = Color(0xfb8c00)
@@ -88,8 +89,10 @@ fun manageCommands(config: ConfigService) = commands {
         expect(TextChannelArg)
 
         execute {
-            config.setLogChannel(it.guild?.id!!, it.args.first() as TextChannelImpl)
-            config.save()
+            val args = Arguments(it.args)
+            val channel = args.asType<TextChannelImpl>(0)
+
+            config.setLogChannel(it.guild?.id!!, channel!!)
 
             it.respond(embed {
                 color = Color(0xfb8c00)
@@ -111,10 +114,10 @@ fun manageCommands(config: ConfigService) = commands {
         expect(OnOffArg)
 
         execute {
-            val isOn = it.args.first() as Boolean
+            val args = Arguments(it.args)
+            val isOn = args.asType<Boolean>(0)!!
 
             config.enableLogging(it.guild?.id!!, isOn)
-            config.save()
 
             it.respond(embed {
                 color = Color(0xfb8c00)
