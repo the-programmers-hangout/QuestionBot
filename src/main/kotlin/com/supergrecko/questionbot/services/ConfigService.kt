@@ -9,6 +9,12 @@ import me.aberrantfox.kjdautils.internal.di.PersistenceService
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
+enum class LogChannels {
+    QUESTION,
+    ANSWER,
+    LOG
+}
+
 data class QGuild(
         val config: GuildConfig,
         val guild: Guild
@@ -35,25 +41,13 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         )
     }
 
-    /**
-     * Set the log channel to be used
-     *
-     * @param guild the guild to edit
-     * @param channel the text channel
-     */
-    fun setLogChannel(guild: String, channel: TextChannelImpl) {
-        getConfig(guild).channels.logs = channel.id
-        save()
-    }
+    fun setChannel(name: LogChannels, guild: String, channel: TextChannelImpl) {
+        when (name) {
+            LogChannels.ANSWER -> getConfig(guild).channels.answers = channel.id
+            LogChannels.QUESTION -> getConfig(guild).channels.questions = channel.id
+            LogChannels.LOG -> getConfig(guild).channels.logs = channel.id
+        }
 
-    /**
-     * Set the question channel to be used
-     *
-     * @param guild the guild to edit
-     * @param channel the text channel
-     */
-    fun setQuestionChannel(guild: String, channel: TextChannelImpl) {
-        getConfig(guild).channels.questions = channel.id
         save()
     }
 
