@@ -5,8 +5,6 @@ import me.aberrantfox.kjdautils.api.dsl.CommandEvent
 import net.dv8tion.jda.api.entities.TextChannel
 import me.aberrantfox.kjdautils.api.dsl.embed
 import java.awt.Color
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Service
 class LogService(val config: ConfigService) {
@@ -35,13 +33,14 @@ class LogService(val config: ConfigService) {
         val link = "https://discordapp.com/channels/${event.guild?.id}/${event.channel.id}/${event.message.id}"
 
         color = Color(0xfb8c00)
-        thumbnail = event.author.effectiveAvatarUrl
-        title = "Command Invoked: ${event.commandStruct.commandName}"
-        description = event.message.contentRaw
+        title = "Command Invoked"
 
-        addInlineField("Invoked By", event.author.name)
-        addInlineField("Date", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
-        addField("Link:", link)
+        addInlineField("Command", event.commandStruct.commandName)
+        addInlineField("Invoked By", event.author.asTag)
+        addInlineField("Author ID", event.author.id)
+        addField("Command Text", event.message.contentDisplay)
+
+        addField("Original Message", link)
     }
 
     /**
