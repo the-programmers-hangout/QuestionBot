@@ -12,7 +12,8 @@ import net.dv8tion.jda.internal.entities.TextChannelImpl
 enum class LogChannels {
     QUESTION,
     ANSWER,
-    LOG
+    LOG,
+    REPLYTO
 }
 
 data class QGuild(
@@ -50,10 +51,13 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     fun setChannel(name: LogChannels, guild: String, channel: TextChannelImpl) {
+        val settings = getConfig(guild).channels
+
         when (name) {
-            LogChannels.ANSWER -> getConfig(guild).channels.answers = channel.id
-            LogChannels.QUESTION -> getConfig(guild).channels.questions = channel.id
-            LogChannels.LOG -> getConfig(guild).channels.logs = channel.id
+            LogChannels.ANSWER -> settings.answers = channel.id
+            LogChannels.QUESTION -> settings.questions = channel.id
+            LogChannels.LOG -> settings.logs = channel.id
+            LogChannels.REPLYTO -> settings.replyTo = channel.id
         }
 
         save()

@@ -50,7 +50,7 @@ fun manageCommands(config: ConfigService) = commands {
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(ChoiceArg("ChoiceArg", "log", "questions", "answers"), TextChannelArg)
+        expect(ChoiceArg("ChoiceArg", "log", "questions", "answers", "replyto"), TextChannelArg)
 
         execute {
             val args = Arguments(it.args)
@@ -61,6 +61,7 @@ fun manageCommands(config: ConfigService) = commands {
                 "log" -> config.setChannel(LogChannels.LOG, it.guild?.id!!, channel!!)
                 "questions" -> config.setChannel(LogChannels.QUESTION, it.guild?.id!!, channel!!)
                 "answers" -> config.setChannel(LogChannels.ANSWER, it.guild?.id!!, channel!!)
+                "replyto" -> config.setChannel(LogChannels.REPLYTO, it.guild?.id!!, channel!!)
 
                 else -> return@execute it.respond("Error, the option $command is not valid.")
             }
