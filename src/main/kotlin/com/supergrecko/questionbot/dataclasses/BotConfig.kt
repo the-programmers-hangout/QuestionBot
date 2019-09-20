@@ -73,6 +73,8 @@ data class Question(
         this.note = note
         this.question = question
     }
+
+    fun addAnswer(answer: Answer) = responses.add(answer)
 }
 
 /**
@@ -90,4 +92,12 @@ data class Answer(
         var reason: String = "This answer is still listed.",
         var invocation: String = "",
         var embed: String = ""
-)
+) {
+    fun setEmbedId(embedId: String) {
+        this.embed = embedId
+    }
+
+    fun setInvocationId(invocationId: String) {
+        this.invocation = invocationId
+    }
+}

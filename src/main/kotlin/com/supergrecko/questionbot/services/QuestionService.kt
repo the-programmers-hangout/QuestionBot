@@ -97,10 +97,10 @@ class QuestionService(val config: ConfigService) {
      */
     private fun getEmbed(state: QGuild, question: Question) = embed {
         val author = state.guild.getMemberById(question.sender)!!
+        val askChannel = state.guild.getTextChannelById(state.config.channels.questions) ?: state.guild.textChannels.first()
 
         color = Color(0xfb8c00)
         thumbnail = author.user.effectiveAvatarUrl
-
         title = "${author.fullName()} has asked a question! (#${question.id})"
         description = question.question
 
@@ -108,7 +108,8 @@ class QuestionService(val config: ConfigService) {
             addField("Notes:", question.note)
         }
 
-        addField("How to reply:", "todo this")
+        addField("How to reply:", "Invoke ${config.config.prefix}answer with the question id in #${askChannel.name}")
+        addField("Example","${config.config.prefix}answer ${question.id} This my answer to the question")
     }
 
 }
