@@ -108,7 +108,7 @@ class QuestionService(val config: ConfigService) {
             addField("Notes:", question.note)
         }
 
-        addField("How to reply:", "Invoke ${config.config.prefix}answer with the question id in #${askChannel.name}")
+        addField("How to reply:", "Invoke ${config.config.prefix}answer with the question id in ${askChannel.asMention}")
         addField("Example","${config.config.prefix}answer ${question.id} This my answer to the question")
     }
 
