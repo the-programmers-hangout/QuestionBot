@@ -47,7 +47,8 @@ data class GuildConfig(
 data class GuildChannels(
         var logs: String = "0",
         var questions: String = "0",
-        var answers: String = "0"
+        var answers: String = "0",
+        var replyTo: String = "0"
 )
 
 /**
