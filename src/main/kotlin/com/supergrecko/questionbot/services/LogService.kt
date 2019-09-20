@@ -36,11 +36,18 @@ class LogService(val config: ConfigService) {
         title = "Command Invoked"
 
         addInlineField("Command", event.commandStruct.commandName)
-        addInlineField("Invoked By", event.author.asTag)
         addInlineField("Author ID", event.author.id)
+        addInlineField("Original Message", "[Link]($link)")
         addField("Command Text", event.message.contentDisplay)
 
-        addField("Original Message", link)
+        author {
+            name = event.author.asTag
+            iconUrl = event.author.effectiveAvatarUrl
+        }
+
+        footer {
+            timeStamp = event.message.timeCreated
+        }
     }
 
     /**

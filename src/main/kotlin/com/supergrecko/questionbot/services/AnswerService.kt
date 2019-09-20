@@ -83,18 +83,19 @@ class AnswerService(val config: ConfigService) {
     }
 
     /**
-     * Generate the RichEmbed for the given question
+     * Generate the RichEmbed for an answer
      *
      * @param state the guild to pull data from
-     * @param question the question
+     * @param answerDetails the question
      */
     private fun getEmbed(state: QGuild, answerDetails: AnswerDetails) = embed {
-        val linkToQuestion = "https://discordapp.com/channels/${state.guild?.id}/${state.config.channels.questions}/${answerDetails.questionId}"
+        val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.questions}/${answerDetails.questionId}"
 
         color = Color(0xfb8c00)
-        title = "${answerDetails.sender.asTag} has answered question (#${answerDetails.questionId})!"
+        title = "${answerDetails.sender.asTag} has answered question #${answerDetails.questionId}!"
         description = answerDetails.text
-        addField("Question", linkToQuestion)
+
+        addField("Link to Question", "[Link]($link)")
     }
 
 }

@@ -97,19 +97,20 @@ class QuestionService(val config: ConfigService) {
      */
     private fun getEmbed(state: QGuild, question: Question) = embed {
         val author = state.guild.getMemberById(question.sender)!!
-        val askChannel = state.guild.getTextChannelById(state.config.channels.questions) ?: state.guild.textChannels.first()
 
         color = Color(0xfb8c00)
-        thumbnail = author.user.effectiveAvatarUrl
-        title = "${author.fullName()} has asked a question! (#${question.id})"
-        description = question.question
+        title = "${question.question} (#${question.id})"
 
-        if (question.note != "") {
-            addField("Notes:", question.note)
-        }
+        description = question.note
 
-        addField("How to reply:", "Invoke ${config.config.prefix}answer with the question id in ${askChannel.asMention}")
+        addBlankField(false)
+        addField("How do I reply?", "You can answer questions by invoking the `${config.config.prefix}answer` command in the bot commands channel.")
         addField("Example","${config.config.prefix}answer ${question.id} This my answer to the question")
+
+        author {
+            name = author.user.asTag
+            iconUrl = author.user.effectiveAvatarUrl
+        }
     }
 
 }
