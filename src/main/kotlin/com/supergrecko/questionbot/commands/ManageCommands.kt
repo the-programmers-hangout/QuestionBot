@@ -74,13 +74,13 @@ fun manageCommands(config: ConfigService) = commands {
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(OnOffArg)
+        expect(ChoiceArg("ChoiceArg", "on", "off"))
 
         execute {
             val args = Arguments(it.args)
-            val isOn = args.asType<Boolean>(0)!!
+            val param = args.asType<String>(0)!!
 
-            config.enableLogging(it.guild?.id!!, isOn)
+            config.enableLogging(it.guild?.id!!, param == "on")
 
             it.respond("Success, logging settings have successfully been updated.")
         }
