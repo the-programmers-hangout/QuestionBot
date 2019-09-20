@@ -30,10 +30,10 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers) ?: it.guild!!.textChannels.first()
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
-                it.respond("You have already answered Question#${question!!.id}. Check #${channel.name}")
+                it.respond("You have already answered Question#${question!!.id}. Check ${channel.asMention}")
             } else {
                 answerService.addAnswer(it.guild!!, details)
-                it.respond("Your answer has been posted in #${channel.name}")
+                it.respond("Your answer has been posted in ${channel.asMention}")
             }
         }
     }
