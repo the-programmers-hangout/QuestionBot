@@ -59,6 +59,69 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             } else {
                 it.respond("You have not answered Question#${question!!.id}.")
             }
+        }
+    }
+
+    command("delete") {
+        description = "Delete an answer to a question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val details = AnswerDetails(it.author, it.message.id, question!!.id)
+
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                answerService.deleteAnswer(it.guild!!, details)
+                it.respond("Your answer was deleted.")
+            } else {
+                it.respond("You have not answered Question#${question!!.id}.")
+            }
+        }
+    }
+
+    command("list") {
+        description = "List answers to a given question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val state = config.getGuild(it.guild!!.id)
+
+            if (state.getQuestion(question!!.id).responses.size == 0) {
+                it.respond("There are no answers for Question #${question.id} yet.")
+            } else {
+                answerService.listAnswers(it.guild!!, question!!.id)
+            }
+        }
+    }
+
+    command("edit") {
+        description = "Edit an answer to a question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg, SentenceArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val answer = args.asType<String>(1)
+            val details = AnswerDetails(it.author, it.message.id, question!!.id, answer!!)
+
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                answerService.editAnswer(it.guild!!, details)
+                it.respond("Your answer was updated.")
+            } else {
+                it.respond("You have not answered Question#${question!!.id}.")
+            }
 
         }
     }

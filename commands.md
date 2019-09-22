@@ -27,8 +27,10 @@
 | question | ChoiceArg, Question, ((Separated\|Text)) | Edit or delete a question   |
 
 ## answer
-| Commands | Arguments      | Description                    |
-| -------- | -------------- | ------------------------------ |
-| answer   | Question, Text | Answer a question              |
-| delete   | Question       | Delete an answer to a question |
-| edit     | Question, Text | Edit an answer to a question   |
+| Commands | Arguments      | Description                      |
+| -------- | -------------- | -------------------------------- |
+| answer   | Question, Text | Answer a question                |
+| delete   | Question       | Delete an answer to a question   |
+| edit     | Question, Text | Edit an answer to a question     |
+| list     | Question       | List answers to a given question |
+
