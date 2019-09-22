@@ -7,6 +7,7 @@ import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.User
 import java.awt.Color
 
 /**
@@ -54,14 +55,39 @@ class AnswerService(val config: ConfigService) {
     }
 
     /**
-     * Edits a question with the given guild and sends updated question to the given guild
+     * Edits an answer with the given answer details
      *
      * @param guild the guild to send a question from
-     * @param newText the new answer text
-     * @param embedId the id of the embed in the answers channel
+     * @param answerDetails the answer details for the answer
      */
-    fun editAnswer(guild: Guild, id: Int, newText: String, embedId: String) {
+    fun editAnswer(guild: Guild, answerDetails: AnswerDetails) {
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(answerDetails.questionId)
+        val answerToUpdate = question.getAnswerByAuthor(answerDetails.sender.id)
+        val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
+        answerToUpdate?.setInvocationId(answerDetails.invocationId)
+        config.save()
+
+        channel.editMessageById(answerToUpdate!!.embed, getEmbed(state, answerDetails)).queue()
+    }
+
+    /**
+     * Deletes an answer to a given question from the given guild
+     *
+     * @param guild the guild to delete from
+     * @param answerDetails the answer details for the answer
+     */
+    fun deleteAnswer(guild: Guild, answerDetails: AnswerDetails) {
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(answerDetails.questionId)
+        val answerToDelete = question.getAnswerByAuthor(answerDetails.sender.id)
+        val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
+
+        question.deleteAnswerByAuthor(answerDetails.sender.id)
+        config.save()
+
+        channel.deleteMessageById(answerToDelete!!.embed).queue()
     }
 
     /**
