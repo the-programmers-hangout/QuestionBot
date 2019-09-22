@@ -22,9 +22,10 @@ fun manageCommands(config: ConfigService) = commands {
         expect(RoleArg)
 
         execute {
+            // These will always exist
             val args = Arguments(it.args)
             val role = args.asType<RoleImpl>(0)
-            config.setAdminRole(it.guild!!.id, role!!.name)
+            config.setAdminRole(it.guild!!.id, role.name)
 
             it.respond("Success, the minimum required role to invoke admin commands was set to `${role.name}`.")
         }
@@ -54,15 +55,17 @@ fun manageCommands(config: ConfigService) = commands {
 
         execute {
             val args = Arguments(it.args)
+            // These will always exist
             val command = args.asType<String>(0)
             val channel = args.asType<TextChannelImpl>(1)
 
             when (command) {
-                "log" -> config.setChannel(LogChannels.LOG, it.guild?.id!!, channel!!)
-                "questions" -> config.setChannel(LogChannels.QUESTION, it.guild?.id!!, channel!!)
-                "answers" -> config.setChannel(LogChannels.ANSWER, it.guild?.id!!, channel!!)
-                "replyto" -> config.setChannel(LogChannels.REPLYTO, it.guild?.id!!, channel!!)
+                "log" -> config.setChannel(LogChannels.LOG, it.guild?.id!!, channel)
+                "questions" -> config.setChannel(LogChannels.QUESTION, it.guild?.id!!, channel)
+                "answers" -> config.setChannel(LogChannels.ANSWER, it.guild?.id!!, channel)
+                "replyto" -> config.setChannel(LogChannels.REPLYTO, it.guild?.id!!, channel)
 
+                // Should be unreachable
                 else -> return@execute it.respond("Error, the option $command is not valid.")
             }
 
@@ -78,8 +81,9 @@ fun manageCommands(config: ConfigService) = commands {
         expect(ChoiceArg("ChoiceArg", "on", "off"))
 
         execute {
+            // These will always exist
             val args = Arguments(it.args)
-            val param = args.asType<String>(0)!!
+            val param = args.asType<String>(0)
 
             config.enableLogging(it.guild?.id!!, param == "on")
 

@@ -32,4 +32,3 @@
 | answer   | Question, Text | Answer a question              |
 | delete   | Question       | Delete an answer to a question |
 | edit     | Question, Text | Edit an answer to a question   |
-

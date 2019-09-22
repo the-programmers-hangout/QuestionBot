@@ -49,24 +49,28 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
             val args = Arguments(it.args)
 
             when (args.asType<String>(0)) {
-                "edit" -> editQuestion(this, it, args, questionService)
-                "delete" -> deleteQuestion(this, it, args, questionService)
+                "edit" -> editQuestion(it, args, questionService)
+                "delete" -> deleteQuestion(it, args, questionService)
             }
         }
     }
 }
 
-private fun editQuestion(cmd: Command, event: CommandEvent, args: Arguments, service: QuestionService) {
+private fun editQuestion(event: CommandEvent, args: Arguments, service: QuestionService) {
     val id = args.asType<Question>(1)
     val (question, note) = args.fromList<String>(2, 0, 1)
 
-    service.editQuestion(event.guild!!, id!!.id, question ?: "No question was asked.", note ?: "")
+    service.editQuestion(event.guild!!, id.id, question ?: "No question was asked.", note ?: "")
     event.respond("Question #${id.id} has been edited.")
 }
 
-private fun deleteQuestion(cmd: Command, event: CommandEvent, args: Arguments, service: QuestionService) {
+private fun deleteQuestion(event: CommandEvent, args: Arguments, service: QuestionService) {
     val id = args.asType<Question>(1)
 
-    service.deleteQuestion(event.guild!!, id!!.id)
+    service.deleteQuestion(event.guild!!, id.id) {
+        event.respond("Question #${id.id} could not be found.")
+        return@deleteQuestion
+    }
+
     event.respond("Question #${id.id} has been deleted.")
 }

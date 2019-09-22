@@ -36,7 +36,16 @@ data class GuildConfig(
         val questions: MutableList<Question> = mutableListOf()
 ) {
     fun addQuestion(question: Question) = questions.add(question)
-    fun deleteQuestion(question: Question) = questions.removeAll { it.id == question.id }
+    fun deleteQuestion(question: Question, orElse: () -> Unit = {}) {
+        val question = questions.find { it.id == question.id }
+
+        if (question != null) {
+            questions.remove(question)
+            return
+        }
+
+        orElse()
+    }
 }
 
 /**

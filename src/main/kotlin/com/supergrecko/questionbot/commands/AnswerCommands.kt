@@ -23,14 +23,16 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
         execute {
             val args = Arguments(it.args)
+            // These will always exist
             val question = args.asType<Question>(0)
             val answer = args.asType<String>(1)
+
             val state = config.getGuild(it.guild?.id!!)
-            val details = AnswerDetails(it.author, it.message.id, question!!.id, answer!!)
+            val details = AnswerDetails(it.author, it.message.id, question.id, answer)
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers) ?: it.guild!!.textChannels.first()
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
-                it.respond("You have already answered Question#${question!!.id}. Check ${channel.asMention}")
+                it.respond("You have already answered Question#${question.id}. Check ${channel.asMention}")
             } else {
                 answerService.addAnswer(it.guild!!, details)
                 it.respond("Your answer has been posted in ${channel.asMention}")
