@@ -4,7 +4,6 @@ import com.supergrecko.questionbot.dataclasses.GuildConfig
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
 import java.awt.Color
 
@@ -69,6 +68,22 @@ class QuestionService(val config: ConfigService) {
         config.save()
 
         channel.editMessageById(question.message, getEmbed(state, question)).queue()
+    }
+
+    /**
+     * Deletes a question from the given guild
+     *
+     * @param guild the guild to delete from
+     * @param id the question id to delete
+     */
+    fun deleteQuestion(guild: Guild, id: Int) {
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(id)
+
+        state.guild.getTextChannelById(question.channel)!!.deleteMessageById(question.message).queue()
+
+        state.config.deleteQuestion(question)
+        config.save()
     }
 
     /**
