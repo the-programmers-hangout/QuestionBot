@@ -25,6 +25,7 @@ data class BotConfig(
  * @property count amount of questions asked in this guild
  * @property channels the channels to output to
  * @property loggingEnabled whether logging is enabled or not
+ * @property questions the questions asked in this guild
  */
 data class GuildConfig(
         var guild: String = "",
@@ -35,6 +36,7 @@ data class GuildConfig(
         val questions: MutableList<Question> = mutableListOf()
 ) {
     fun addQuestion(question: Question) = questions.add(question)
+    fun deleteQuestion(question: Question) = questions.removeAll { it.id == question.id }
 }
 
 /**

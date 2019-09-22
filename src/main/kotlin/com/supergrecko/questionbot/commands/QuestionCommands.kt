@@ -7,8 +7,9 @@ import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
-import me.aberrantfox.kjdautils.api.dsl.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.*
+import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
+import me.aberrantfox.kjdautils.internal.arguments.EitherArg
 import me.aberrantfox.kjdautils.internal.arguments.SplitterArg
 
 @CommandSet("ask")
@@ -33,31 +34,39 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         }
     }
 
-    command("edit") {
-        description = "Edit a question"
+    command("question") {
+        description = "Edit or delete a question"
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(QuestionArg, SplitterArg)
+        expect(
+                arg(ChoiceArg("ChoiceArg", "edit", "delete")),
+                arg(QuestionArg),
+                arg(SplitterArg, optional = true, default = "|")
+        )
 
         execute {
             val args = Arguments(it.args)
-            val id = args.asType<Question>(0)
-            val (question, note) = args.fromList<String>(1, 0, 1)
 
-            questionService.editQuestion(it.guild!!, id!!.id, question ?: "No question was asked.", note ?: "")
-            it.respond("Question #${id.id} has been edited.")
+            when (args.asType<String>(0)) {
+                "edit" -> editQuestion(this, it, args, questionService)
+                "delete" -> deleteQuestion(this, it, args, questionService)
+            }
         }
     }
+}
 
-    command("delete") {
-        description = "Delete a question"
-        requiresGuild = true
-        permission = PermissionLevel.ADMIN
+private fun editQuestion(cmd: Command, event: CommandEvent, args: Arguments, service: QuestionService) {
+    val id = args.asType<Question>(1)
+    val (question, note) = args.fromList<String>(2, 0, 1)
 
-        expect(QuestionArg)
+    service.editQuestion(event.guild!!, id!!.id, question ?: "No question was asked.", note ?: "")
+    event.respond("Question #${id.id} has been edited.")
+}
 
-        execute {
-        }
-    }
+private fun deleteQuestion(cmd: Command, event: CommandEvent, args: Arguments, service: QuestionService) {
+    val id = args.asType<Question>(1)
+
+    service.deleteQuestion(event.guild!!, id!!.id)
+    event.respond("Question #${id.id} has been deleted.")
 }
