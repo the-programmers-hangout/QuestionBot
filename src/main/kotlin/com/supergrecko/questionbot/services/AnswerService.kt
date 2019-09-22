@@ -73,7 +73,7 @@ class AnswerService(val config: ConfigService) {
     }
 
     /**
-     * Deletes a question from the given guild
+     * Deletes an answer to a given question from the given guild
      *
      * @param guild the guild to delete from
      * @param answerDetails the answer details for the answer
