@@ -7,6 +7,7 @@ import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.User
 import java.awt.Color
 
 /**
@@ -60,8 +61,16 @@ class AnswerService(val config: ConfigService) {
      * @param newText the new answer text
      * @param embedId the id of the embed in the answers channel
      */
-    fun editAnswer(guild: Guild, id: Int, newText: String, embedId: String) {
+    fun editAnswer(guild: Guild, answerDetails: AnswerDetails) {
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(answerDetails.questionId)
+        val message = question.getAnswerByAuthor(answerDetails.sender.id)
+        val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
+        message?.setInvocationId(answerDetails.invocationId)
+        config.save()
+
+        channel.editMessageById(message!!.embed, getEmbed(state, answerDetails)).queue()
     }
 
     /**

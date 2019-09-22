@@ -21,6 +21,7 @@ data class QGuild(
         val guild: Guild
 ) {
     fun getQuestion(id: Int) = config.questions.first { it.id == id }
+    fun getAnser(questionId: Int) = {}
 }
 
 @Service

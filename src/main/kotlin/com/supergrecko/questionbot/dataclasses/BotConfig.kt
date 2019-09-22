@@ -76,8 +76,8 @@ data class Question(
         this.note = note
         this.question = question
     }
-
     fun addAnswer(answer: Answer) = responses.add(answer)
+    fun getAnswerByAuthor(authorId: String) = responses.find{ it -> it.sender == authorId }
 }
 
 /**
@@ -99,8 +99,11 @@ data class Answer(
     fun setEmbedId(embedId: String) {
         this.embed = embedId
     }
-
     fun setInvocationId(invocationId: String) {
         this.invocation = invocationId
+    }
+    fun update(embed: String, invocation: String) {
+        this.embed = embed
+        this.invocation = invocation
     }
 }

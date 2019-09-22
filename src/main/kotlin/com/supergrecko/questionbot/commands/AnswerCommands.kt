@@ -37,4 +37,27 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             }
         }
     }
+
+    command("edit") {
+        description = "Edit an answer to a question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg, SentenceArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val answer = args.asType<String>(1)
+            val details = AnswerDetails(it.author, it.message.id, question!!.id, answer!!)
+
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                answerService.editAnswer(it.guild!!, details)
+                it.respond("Your answer was updated.")
+            } else {
+                it.respond("You have not answered Question#${question!!.id}.")
+            }
+
+        }
+    }
 }
