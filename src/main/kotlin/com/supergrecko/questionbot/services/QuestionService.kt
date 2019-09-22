@@ -75,14 +75,15 @@ class QuestionService(val config: ConfigService) {
      *
      * @param guild the guild to delete from
      * @param id the question id to delete
+     * @param orElse code to be executed if the question did not exist
      */
-    fun deleteQuestion(guild: Guild, id: Int) {
+    fun deleteQuestion(guild: Guild, id: Int, orElse: () -> Unit = {}) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(id)
 
         state.guild.getTextChannelById(question.channel)!!.deleteMessageById(question.message).queue()
 
-        state.config.deleteQuestion(question)
+        state.config.deleteQuestion(question, orElse)
         config.save()
     }
 

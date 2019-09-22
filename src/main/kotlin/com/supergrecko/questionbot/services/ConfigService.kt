@@ -43,12 +43,10 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         save()
     }
 
-    fun getGuild(guild: String): QGuild {
-        return QGuild(
-                guild = discord.jda.getGuildById(guild)!!,
-                config = getConfig(guild)
-        )
-    }
+    fun getGuild(guild: String) = QGuild(
+            guild = discord.jda.getGuildById(guild)!!,
+            config = getConfig(guild)
+    )
 
     fun setChannel(name: LogChannels, guild: String, channel: TextChannelImpl) {
         val settings = getConfig(guild).channels

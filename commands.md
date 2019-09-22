@@ -26,9 +26,8 @@
 | answer   | Question, Text | Answer a question |
 
 ## ask
-| Commands       | Arguments                                | Description                 |
-| -------------- | ---------------------------------------- | --------------------------- |
-| ask            | (Separated\|Text)                        | Ask the channel a question. |
-| deletequestion | Question                                 | Delete a question           |
-| question       | ChoiceArg, Question, ((Separated\|Text)) | Edit or delete a question   |
+| Commands | Arguments                                | Description                 |
+| -------- | ---------------------------------------- | --------------------------- |
+| ask      | (Separated\|Text)                        | Ask the channel a question. |
+| question | ChoiceArg, Question, ((Separated\|Text)) | Edit or delete a question   |
 
