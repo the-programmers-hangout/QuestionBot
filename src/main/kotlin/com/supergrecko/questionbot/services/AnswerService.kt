@@ -5,7 +5,9 @@ import com.supergrecko.questionbot.dataclasses.AnswerDetails
 import com.supergrecko.questionbot.dataclasses.GuildConfig
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
+import me.aberrantfox.kjdautils.api.dsl.Menu
 import me.aberrantfox.kjdautils.api.dsl.embed
+import me.aberrantfox.kjdautils.api.dsl.menu
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.User
@@ -97,26 +99,33 @@ class AnswerService(val config: ConfigService) {
      * @param guild the guild to send a question from
      * @param questionId the question id to send
      */
-    fun listAnswers(guild: Guild, questionId: Int) {
+    fun listAnswers(guild: Guild, questionId: Int): Menu {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(questionId)
-        val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
-        val embed = embed {
-            title = "Showing ${question.responses.size} answers for Question #$questionId:"
-            description = "${question.question}"
-            color = Color(0xfb8c00)
+        val paginated = question.responses.chunked(6)
 
-            addField("", "List of Answers:")
-            question.responses.forEachIndexed { index, it ->
-                val author = guild.getMemberById(it.sender)
-                val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.answers}/${it.embed}"
-                addField("${author!!.fullName()}:", "[Link]($link)", true)
+        return menu {
+            paginated.forEachIndexed { index, list ->
+                embed {
+                    title = "Showing ${question.responses.size} answers for Question #${question.id}:"
+                    description = "${question.question}"
+                    color = Color(0xfb8c00)
 
-                // Add blank space to maintain 3 items width in line
-                if (index == question.responses.lastIndex && question.responses.lastIndex % 3 > 0) addBlankField(true)
+                    addField("", "List of Answers:")
+                    footer {
+                        text = "Answer page ${index + 1} of ${paginated.size}"
+                    }
+                    list.forEachIndexed { index, it ->
+                        val author = guild.getMemberById(it.sender)
+                        val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.answers}/${it.embed}"
+                        addField("${author!!.fullName()}:", "[Link]($link)", true)
+
+                        // Add blank space to maintain 3 items width in line
+                        if (index == question.responses.lastIndex && question.responses.lastIndex % 3 > 0) addBlankField(true)
+                    }
+                }
             }
         }
-        channel.sendMessage(embed).queue()
     }
 
     /**

@@ -10,6 +10,7 @@ import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.respond
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 
 @CommandSet("answer")
@@ -98,7 +99,8 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             if (state.getQuestion(question!!.id).responses.size == 0) {
                 it.respond("There are no answers for Question #${question.id} yet.")
             } else {
-                answerService.listAnswers(it.guild!!, question!!.id)
+                val msg = answerService.listAnswers(it.guild!!, question!!.id)
+                it.respond(msg)
             }
         }
     }
