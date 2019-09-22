@@ -55,22 +55,39 @@ class AnswerService(val config: ConfigService) {
     }
 
     /**
-     * Edits a question with the given guild and sends updated question to the given guild
+     * Edits an answer with the given answer details
      *
      * @param guild the guild to send a question from
-     * @param newText the new answer text
-     * @param embedId the id of the embed in the answers channel
+     * @param answerDetails the answer details for the answer
      */
     fun editAnswer(guild: Guild, answerDetails: AnswerDetails) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
-        val message = question.getAnswerByAuthor(answerDetails.sender.id)
+        val answerToUpdate = question.getAnswerByAuthor(answerDetails.sender.id)
         val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
-        message?.setInvocationId(answerDetails.invocationId)
+        answerToUpdate?.setInvocationId(answerDetails.invocationId)
         config.save()
 
-        channel.editMessageById(message!!.embed, getEmbed(state, answerDetails)).queue()
+        channel.editMessageById(answerToUpdate!!.embed, getEmbed(state, answerDetails)).queue()
+    }
+
+    /**
+     * Deletes a question from the given guild
+     *
+     * @param guild the guild to delete from
+     * @param answerDetails the answer details for the answer
+     */
+    fun deleteAnswer(guild: Guild, answerDetails: AnswerDetails) {
+        val state = config.getGuild(guild.id)
+        val question = state.getQuestion(answerDetails.questionId)
+        val answerToDelete = question.getAnswerByAuthor(answerDetails.sender.id)
+        val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
+
+        question.deleteAnswerByAuthor(answerDetails.sender.id)
+        config.save()
+
+        channel.deleteMessageById(answerToDelete!!.embed).queue()
     }
 
     /**

@@ -78,6 +78,7 @@ data class Question(
     }
     fun addAnswer(answer: Answer) = responses.add(answer)
     fun getAnswerByAuthor(authorId: String) = responses.find{ it -> it.sender == authorId }
+    fun deleteAnswerByAuthor(authorId: String) = responses.removeAll{ it.sender == authorId }
 }
 
 /**

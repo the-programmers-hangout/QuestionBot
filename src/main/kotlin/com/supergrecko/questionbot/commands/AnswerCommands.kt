@@ -60,4 +60,26 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
         }
     }
+
+    command("delete") {
+        description = "Delete an answer to a question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val details = AnswerDetails(it.author, it.message.id, question!!.id)
+
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                answerService.deleteAnswer(it.guild!!, details)
+                it.respond("Your answer was deleted.")
+            } else {
+                it.respond("You have not answered Question#${question!!.id}.")
+            }
+
+        }
+    }
 }
