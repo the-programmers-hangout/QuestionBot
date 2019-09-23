@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.User
  */
 data class AnswerDetails(
         var sender: User,
+        @Deprecated("delete this")
         var invocationId: String = "",
         var questionId: Int = 0,
         var text: String = ""

@@ -10,6 +10,5 @@ package com.supergrecko.questionbot.dataclasses
 data class GuildChannels(
         var logs: String = "0",
         var questions: String = "0",
-        var answers: String = "0",
-        var replyTo: String = "0"
+        var answers: String = "0"
 )

@@ -86,7 +86,7 @@ class AnswerService(val config: ConfigService) {
         val answerToDelete = question.get(answerDetails.sender.id)
         val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
-        question.deleteAnswerByAuthor(answerDetails.sender.id)
+        question.deleteBy(answerDetails.sender.id)
         config.save()
 
         channel.deleteMessageById(answerToDelete!!.messageSnowflake).queue()

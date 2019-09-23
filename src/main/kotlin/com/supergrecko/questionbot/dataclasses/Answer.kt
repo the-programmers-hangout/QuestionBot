@@ -14,11 +14,20 @@ data class Answer(
         var messageSnowflake: String = "",
         var invocationSnowflake: String = ""
 ) {
-    fun setEmbedId(embedId: String) = run { this.messageSnowflake = embedId }
+    /**
+     * Sets the message snowflake where the RichEmbed was posted
+     *
+     * @param id the snowflake to set
+     */
+    fun setEmbedId(id: String) = run { this.messageSnowflake = id }
+
+    @Deprecated("Delete this")
     fun setInvocationId(invocationId: String) = run { this.invocationSnowflake = invocationId }
+
+    /**
+     * Deletes the embed message
+     *
+     * @param channel the textchannel to remove from
+     */
     fun deleteMessage(channel: TextChannel) = channel.deleteMessageById(messageSnowflake).queue()
-    fun update(embed: String, invocation: String) = run {
-        this.messageSnowflake = embed
-        this.invocationSnowflake = invocation
-    }
 }

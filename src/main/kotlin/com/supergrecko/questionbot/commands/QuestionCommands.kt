@@ -56,19 +56,36 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
     }
 }
 
+/**
+ * Edits a question
+ *
+ * @param event the command execution event
+ * @param args the transformed command arguments
+ * @param service the question service
+ */
 private fun editQuestion(event: CommandEvent, args: Arguments, service: QuestionService) {
     val id = args.asType<Question>(1)
     val (question, note) = args.fromList<String>(2, 0, 1)
 
     service.editQuestion(event.guild!!, id.id, question ?: "No question was asked.", note ?: "")
+
     event.respond("Question #${id.id} has been edited.")
 }
 
+/**
+ * Deletes a question
+ *
+ * @param event the command execution event
+ * @param args the transformed command arguments
+ * @param service the question service
+ */
 private fun deleteQuestion(event: CommandEvent, args: Arguments, service: QuestionService) {
     val id = args.asType<Question>(1)
 
     service.deleteQuestion(event.guild!!, id.id) {
         event.respond("Question #${id.id} could not be found.")
+
+        // Yes, this requires a label to work
         return@deleteQuestion
     }
 

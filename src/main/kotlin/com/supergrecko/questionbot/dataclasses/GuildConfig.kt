@@ -18,8 +18,19 @@ data class GuildConfig(
         val channels: GuildChannels = GuildChannels(),
         val questions: MutableList<Question> = mutableListOf()
 ) {
+    /**
+     * Adds a question to the guild
+     *
+     * @param question the question to add
+     */
     fun addQuestion(question: Question) = questions.add(question)
 
+    /**
+     * Deletes a question from the guild
+     *
+     * @param question the question to delete
+     * @param orElse lambda to run if question didn't exist
+     */
     fun deleteQuestion(question: Question, orElse: () -> Unit = {}) {
         val q = questions.find { it.id == question.id }
 

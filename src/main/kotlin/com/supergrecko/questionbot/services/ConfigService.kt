@@ -12,8 +12,7 @@ import net.dv8tion.jda.internal.entities.TextChannelImpl
 enum class LogChannels {
     QUESTION,
     ANSWER,
-    LOG,
-    REPLYTO
+    LOG
 }
 
 data class QGuild(
@@ -55,7 +54,6 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
             LogChannels.ANSWER -> settings.answers = channel.id
             LogChannels.QUESTION -> settings.questions = channel.id
             LogChannels.LOG -> settings.logs = channel.id
-            LogChannels.REPLYTO -> settings.replyTo = channel.id
         }
 
         save()
@@ -96,6 +94,8 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
                     minRoleName = "Staff"
             ))
         }
+
+        save()
     }
 
     /**
@@ -106,7 +106,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     fun unregister(guild: Guild) {
         val guilds = config.guilds.filter { it.guildSnowflake == guild.id }
 
-        config.guilds.removeAll(guilds)
+        guilds.forEach { config.removeGuild(it.guildSnowflake) }
         save()
     }
 }
