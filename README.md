@@ -2,43 +2,18 @@
 
 QuestionBot is a Discord bot designed to create questions for the community to answer.
 
-The command list for QuestionBot can be found [here](commands.md).
+This bot was developed for the Bounty Question system for The Programmers Hangout.
 
-## Setup
+## Documentation
 
-This section shows you the steps to setting up and running QuestionBot.
+All the documentation for QuestionBot can be found inside the [docs](/docs) folder.
 
-### Production
+**Table of Contents**
 
-These are the requirements to set up the bot to run in production.
-
-- A bot token
-- Docker
-
-You can set the bot and run it by running the `deploy.sh` script. This will set up Docker and run the bot.
-
-The first run generates a file in `config/config.json`. Rerun the bot to actually start it.
-
-The deploy script takes one argument: The bot token.
-
-```bash
-./deploy.sh <your bot token here>
-```
-
-### Development
-
-These are the requirements to develop the bot.
-
-- Git (to clone, can also download .zip)
-- JDK version 8+
-- IntelliJ IDEA
-    - If you are not using IntelliJ IDEA you will need Maven as well.
-
-To create a run config for development you want to use `com.supergrecko.questionbot.QuestionBotKt` as the main file.
-
-There should be a single program argument which is the Discord Bot Token.
-
-![Example Run Config](.github/example-run-config.png)
+- [development](/docs/development.md): How to develop the bot locally
+- [deployment](/docs/deployment.md): How to deploy the bot via Docker
+- [commands-ask](/docs/commands-ask.md): The ask command list
+- [commands-manage](/docs/command-manage.md): The configuration command list
 
 ## License
 
