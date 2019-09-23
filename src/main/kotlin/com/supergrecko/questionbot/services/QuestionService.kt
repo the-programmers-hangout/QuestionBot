@@ -18,7 +18,7 @@ private lateinit var guilds: MutableList<GuildConfig>
  * @param id the guild snowflake
  */
 fun getGuild(id: String?): GuildConfig {
-    return guilds.first { it.guild == id }
+    return guilds.first { it.guildSnowflake == id }
 }
 
 @Service
@@ -40,8 +40,8 @@ class QuestionService(val config: ConfigService) {
         val state = config.getGuild(guild.id)
 
         state.config.addQuestion(Question(
-                sender = sender,
-                channel = state.config.channels.questions,
+                authorSnowflake = sender,
+                channelSnowflake = state.config.channels.questions,
                 id = state.config.count + 1,
                 question = question,
                 note = note
@@ -64,10 +64,10 @@ class QuestionService(val config: ConfigService) {
 
         val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
 
-        question.update(newQuestion, newNote)
+        question.edit(newQuestion, newNote)
         config.save()
 
-        channel.editMessageById(question.message, getEmbed(state, question)).queue()
+        channel.editMessageById(question.messageSnowflake, getEmbed(state, question)).queue()
     }
 
     /**
@@ -81,7 +81,12 @@ class QuestionService(val config: ConfigService) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(id)
 
-        state.guild.getTextChannelById(question.channel)!!.deleteMessageById(question.message).queue()
+        state.guild.getTextChannelById(question.channelSnowflake)!!.deleteMessageById(question.messageSnowflake).queue()
+        question.responses.forEach { it.deleteMessage(guild.getTextChannelById(state.config.channels.answers)!!)}
+
+        if (state.config.count == id) {
+            state.config.count--
+        }
 
         state.config.deleteQuestion(question, orElse)
         config.save()
@@ -100,7 +105,7 @@ class QuestionService(val config: ConfigService) {
         val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
 
         channel.sendMessage(getEmbed(state, question)).queue {
-            state.getQuestion(id).message = it.id
+            state.getQuestion(id).messageSnowflake = it.id
             config.save()
         }
     }
@@ -112,7 +117,7 @@ class QuestionService(val config: ConfigService) {
      * @param question the question
      */
     private fun getEmbed(state: QGuild, question: Question) = embed {
-        val author = state.guild.getMemberById(question.sender)!!
+        val author = state.guild.getMemberById(question.authorSnowflake)!!
 
         color = Color(0xfb8c00)
         title = "${question.question} (#${question.id})"

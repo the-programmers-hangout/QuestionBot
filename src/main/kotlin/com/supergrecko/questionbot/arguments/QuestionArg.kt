@@ -28,10 +28,10 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
     override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
         val config = getGuild(event.guild?.id)
 
-        val question = config.questions.firstOrNull { it.id.toString() == args.first() }
+        val question = config.questions.firstOrNull { it.id.toString() == arg }
 
         return if (question == null)
-            ArgumentResult.Error("Question with id (${args.first()}) does not exist in this guild.") else
+            ArgumentResult.Error("Question with id (${arg}) does not exist in this guild.") else
             ArgumentResult.Single(question)
     }
 }
