@@ -11,27 +11,38 @@ These commands are used to configure the bot.
 - [SetPrefix](#setprefix)
 - [SetRole](#setrole)
 
-## AddAnswer
+## AddAnswer (Admin Only)
+
+Adds an answer from a user for the given question
 
 **Syntax**
 
 ```
-$addanswer
-```
+$addanswer <question> <user> <answer>
+```              
 
-**Arguments**       
+**Arguments**      
 
-## DelAnswer
+- `question`: The question id to answer to
+- `user`: The user snowflake to answer for
+- `answer`: The text answer 
+
+## DelAnswer (Admin Only)
     
 **Syntax**
 
+Deletes the answer from given user for given question
+
 ```
-$delanswer
-```
+$delanswer <question> <user>
+```                
 
 **Arguments**  
 
-## EnableLogging
+- `question`: The question id to delete an answer from
+- `user`: The user snowflake to delete answer from
+
+## EnableLogging (Admin Only)
 
 Toggles logging command invocations.
 
@@ -47,7 +58,7 @@ $enablelogging <setting>
     - `on`: Turns on logging
     - `off`: Turns off logging
 
-## SetChannel
+## SetChannel (Admin Only)
 
 Sets the channel to emit `<target>` messages to.
 
@@ -63,8 +74,9 @@ $setchannel <target> <channel>
     - `log`: The text channel to emit logs to
     - `questions`: The text channel to emit questions to
     - `answers`: The text channel to emit answers to
+- `channel`: The text channel to bind these events to
 
-## SetPrefix
+## SetPrefix (Admin Only)
 
 Changes the prefix used to invoke commands.
 
@@ -80,7 +92,7 @@ $setprefix <prefix>
 
 - `prefix`: The new bot prefix.  
 
-## SetRole
+## SetRole (Admin Only)
 
 Sets the minimum required role to invoke bot commands.
 
