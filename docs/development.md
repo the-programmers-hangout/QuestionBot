@@ -11,4 +11,4 @@ To create a run config for development you want to use `com.supergrecko.question
 
 There should be a single program argument which is the Discord Bot Token.
 
-![Example Run Config](/.github/example-run-config.png)
+![Example Run Config](/.github/assets/example-run-config.png)
