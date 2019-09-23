@@ -22,10 +22,12 @@ fun canInvoke(config: ConfigService, logger: LogService) = precondition {
 
     val admin = it.message.member?.roles?.any { r -> r.name == state.config.minRoleName }
 
-    val perm: PermissionLevel = if (admin != true)
+    // Grab the users permission level
+    val perm = if (admin != true)
         PermissionLevel.EVERYONE else
         PermissionLevel.ADMIN
 
+    // Log the invocation
     logger.log(it)
 
     val level = it.container[it.commandStruct.commandName]?.permission ?: PermissionLevel.ADMIN

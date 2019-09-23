@@ -10,6 +10,9 @@ import me.aberrantfox.kjdautils.internal.command.ConsumptionType
  * Question argument for commands
  *
  * @param name optional override name
+ * @property QuestionArg static companion
+ * @property examples list of example values
+ * @property consumptionType single consumption type
  */
 open class QuestionArg(override val name: String = "Question") : ArgumentType {
     companion object : QuestionArg()
@@ -28,6 +31,7 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
     override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
         val config = getGuild(event.guild?.id)
 
+        // Gets the first question with that id
         val question = config.questions.firstOrNull { it.id.toString() == arg }
 
         return if (question == null)

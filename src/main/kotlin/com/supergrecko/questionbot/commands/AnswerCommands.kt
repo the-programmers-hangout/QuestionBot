@@ -30,7 +30,9 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(it.author, it.message.id, question.id, answer)
-            val channel = it.guild!!.getTextChannelById(state.config.channels.answers) ?: it.guild!!.textChannels.first()
+
+            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
+                    ?: it.guild!!.textChannels.first()
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 it.respond("You have already answered Question#${question.id}. Check ${channel.asMention}")
@@ -52,13 +54,13 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
             val answer = args.asType<String>(1)
-            val details = AnswerDetails(it.author, it.message.id, question!!.id, answer!!)
+            val details = AnswerDetails(it.author, it.message.id, question.id, answer)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.editAnswer(it.guild!!, details)
                 it.respond("Your answer was updated.")
             } else {
-                it.respond("You have not answered Question#${question!!.id}.")
+                it.respond("You have not answered Question#${question.id}.")
             }
         }
     }
@@ -73,13 +75,13 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         execute {
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
-            val details = AnswerDetails(it.author, it.message.id, question!!.id)
+            val details = AnswerDetails(it.author, it.message.id, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.deleteAnswer(it.guild!!, details)
                 it.respond("Your answer was deleted.")
             } else {
-                it.respond("You have not answered Question#${question!!.id}.")
+                it.respond("You have not answered Question#${question.id}.")
             }
         }
     }
@@ -96,10 +98,10 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val question = args.asType<Question>(0)
             val state = config.getGuild(it.guild!!.id)
 
-            if (state.getQuestion(question!!.id).responses.size == 0) {
+            if (state.getQuestion(question.id).responses.size == 0) {
                 it.respond("There are no answers for Question #${question.id} yet.")
             } else {
-                val msg = answerService.listAnswers(it.guild!!, question!!.id)
+                val msg = answerService.listAnswers(it.guild!!, question.id)
                 it.respond(msg)
             }
         }
