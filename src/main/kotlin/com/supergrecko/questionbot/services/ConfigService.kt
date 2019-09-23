@@ -101,12 +101,12 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     /**
      * Removes the given guild id from the config
      *
-     * @param guild the guild snowflake
+     * @param guild the guild to remove
      */
-    fun unregister(guild: String) {
-        val item = config.guilds.filter { it.guildSnowflake == guild }
+    fun unregister(guild: Guild) {
+        val guilds = config.guilds.filter { it.guildSnowflake == guild.id }
 
-        config.guilds.removeAll(item)
+        config.guilds.removeAll(guilds)
         save()
     }
 }
