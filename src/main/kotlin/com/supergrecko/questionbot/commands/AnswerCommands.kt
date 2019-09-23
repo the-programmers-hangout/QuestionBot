@@ -10,6 +10,7 @@ import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.respond
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 
 @CommandSet("answer")
@@ -59,7 +60,6 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             } else {
                 it.respond("You have not answered Question#${question!!.id}.")
             }
-
         }
     }
 
@@ -81,7 +81,27 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             } else {
                 it.respond("You have not answered Question#${question!!.id}.")
             }
+        }
+    }
 
+    command("list") {
+        description = "List answers to a given question"
+        requiresGuild = true
+        permission = PermissionLevel.EVERYONE
+
+        expect(QuestionArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val state = config.getGuild(it.guild!!.id)
+
+            if (state.getQuestion(question!!.id).responses.size == 0) {
+                it.respond("There are no answers for Question #${question.id} yet.")
+            } else {
+                val msg = answerService.listAnswers(it.guild!!, question!!.id)
+                it.respond(msg)
+            }
         }
     }
 }
