@@ -46,6 +46,10 @@ $delanswer <question> <user>
 
 Toggles logging command invocations.
 
+**Example**
+
+![Example](/.github/assets/commands/logging-example.png)
+
 **Syntax**
 
 ```
@@ -61,6 +65,10 @@ $enablelogging <setting>
 ## SetChannel (Admin Only)
 
 Sets the channel to emit `<target>` messages to.
+
+**Example**
+
+![Example](/.github/assets/commands/setchannel-example.png)
 
 **Syntax**
 
@@ -82,6 +90,10 @@ Changes the prefix used to invoke commands.
 
 Note: This setting modifies the bot prefix for every guild it is in. Use with caution.
 
+**Example**
+
+![Example](/.github/assets/commands/setprefix-example.png)
+
 **Syntax**
 
 ```
@@ -95,6 +107,10 @@ $setprefix <prefix>
 ## SetRole (Admin Only)
 
 Sets the minimum required role to invoke bot commands.
+
+**Example**
+
+![Example](/.github/assets/commands/setrole-example.png)
 
 **Syntax**
 

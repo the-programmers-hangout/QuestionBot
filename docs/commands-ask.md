@@ -11,6 +11,10 @@ These commands are used to manage new and already existing questions questions
 
 Asks the guild a question
 
+**Example**
+
+![Example](/.github/assets/commands/ask-example.png)
+
 **Syntax**
 
 ```
@@ -22,9 +26,20 @@ $addanswer <question> | <notes>
 - `question`: The question you're asking
 - `notes` (optional): The question notes, if any
 
-## Question
+## Question (Admin Only)
 
 Manages an already asked question
+
+**Example**
+
+Editing an already existing question
+
+![Example](/.github/assets/commands/edit-example-1.png)
+![Example](/.github/assets/commands/edit-example-2.png)
+
+Deleting a question (also deletes all answers)
+
+![Example](/.github/assets/commands/edit-delete-example.png)
 
 **Syntax**
 
