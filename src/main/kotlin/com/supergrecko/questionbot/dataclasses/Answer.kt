@@ -1,29 +1,24 @@
 package com.supergrecko.questionbot.dataclasses
 
+import net.dv8tion.jda.api.entities.TextChannel
+
 /**
  * Represent an answer
  *
- * @property sender the uid who sent the answer
- * @property listed whether the answer has been deleted or not
- * @property reason if it was deleted: why?
- * @property invocation the message id for the command invocation
- * @property embed the message id for the reply embed
+ * @property authorSnowflake the uid who sent the answer
+ * @property invocationSnowflake the message id for the command invocation
+ * @property messageSnowflake the message id for the reply embed
  */
 data class Answer(
-        var sender: String = "",
-        var listed: Boolean = true,
-        var reason: String = "This answer is still listed.",
-        var invocation: String = "",
-        var embed: String = ""
+        var authorSnowflake: String = "",
+        var messageSnowflake: String = "",
+        var invocationSnowflake: String = ""
 ) {
-    fun setEmbedId(embedId: String) {
-        this.embed = embedId
-    }
-    fun setInvocationId(invocationId: String) {
-        this.invocation = invocationId
-    }
-    fun update(embed: String, invocation: String) {
-        this.embed = embed
-        this.invocation = invocation
+    fun setEmbedId(embedId: String) = run { this.messageSnowflake = embedId }
+    fun setInvocationId(invocationId: String) = run { this.invocationSnowflake = invocationId }
+    fun deleteMessage(channel: TextChannel) = channel.deleteMessageById(messageSnowflake).queue()
+    fun update(embed: String, invocation: String) = run {
+        this.messageSnowflake = embed
+        this.invocationSnowflake = invocation
     }
 }
