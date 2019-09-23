@@ -20,7 +20,7 @@ import me.aberrantfox.kjdautils.internal.command.Pass
 fun canInvoke(config: ConfigService, logger: LogService) = precondition {
     val state = config.getGuild(it.guild!!.id)
 
-    val admin = it.message.member?.roles?.any { r -> r.name == state.config.role }
+    val admin = it.message.member?.roles?.any { r -> r.name == state.config.minRoleName }
 
     val perm: PermissionLevel = if (admin != true)
         PermissionLevel.EVERYONE else

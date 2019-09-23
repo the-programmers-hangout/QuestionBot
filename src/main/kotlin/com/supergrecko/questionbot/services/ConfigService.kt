@@ -38,7 +38,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     fun setAdminRole(guild: String, role: String) {
-        getGuild(guild).config.role = role
+        getGuild(guild).config.minRoleName = role
 
         save()
     }
@@ -87,13 +87,13 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     fun registerGuilds() {
         // TODO: find better algo than O(n^2)
         val unsaved = discord.jda.guilds.filter { guild ->
-            config.guilds.none { it.guild == guild.id }
+            config.guilds.none { it.guildSnowflake == guild.id }
         }
 
         unsaved.forEach {
             config.guilds.add(GuildConfig(
-                    guild = it.id,
-                    role = "Staff"
+                    guildSnowflake = it.id,
+                    minRoleName = "Staff"
             ))
         }
     }
@@ -104,7 +104,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
      * @param guild the guild snowflake
      */
     fun unregister(guild: String) {
-        val item = config.guilds.filter { it.guild == guild }
+        val item = config.guilds.filter { it.guildSnowflake == guild }
 
         config.guilds.removeAll(item)
         save()

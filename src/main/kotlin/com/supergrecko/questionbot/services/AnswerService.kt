@@ -10,7 +10,6 @@ import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.api.dsl.menu
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.User
 import java.awt.Color
 
 /**
@@ -34,9 +33,9 @@ class AnswerService(val config: ConfigService) {
     fun addAnswer(guild: Guild, answerDetails: AnswerDetails) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
-        val answer = Answer(sender = answerDetails.sender.id, invocation = answerDetails.invocationId)
+        val answer = Answer(authorSnowflake = answerDetails.sender.id, invocationSnowflake = answerDetails.invocationId)
 
-        question.addAnswer(answer)
+        question.add(answer)
         config.save()
         sendAnswer(guild, question, answer, answerDetails)
     }
@@ -51,7 +50,7 @@ class AnswerService(val config: ConfigService) {
     fun questionAnsweredByUser(guild: Guild, answerDetails: AnswerDetails): Boolean {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
-        if (question.responses.any { it.sender == answerDetails.sender.id }) {
+        if (question.responses.any { it.authorSnowflake == answerDetails.sender.id }) {
             return true
         }
         return false
@@ -66,13 +65,13 @@ class AnswerService(val config: ConfigService) {
     fun editAnswer(guild: Guild, answerDetails: AnswerDetails) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
-        val answerToUpdate = question.getAnswerByAuthor(answerDetails.sender.id)
+        val answerToUpdate = question.get(answerDetails.sender.id)
         val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
         answerToUpdate?.setInvocationId(answerDetails.invocationId)
         config.save()
 
-        channel.editMessageById(answerToUpdate!!.embed, getEmbed(state, question, answerDetails)).queue()
+        channel.editMessageById(answerToUpdate!!.messageSnowflake, getEmbed(state, question, answerDetails)).queue()
     }
 
     /**
@@ -84,13 +83,13 @@ class AnswerService(val config: ConfigService) {
     fun deleteAnswer(guild: Guild, answerDetails: AnswerDetails) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
-        val answerToDelete = question.getAnswerByAuthor(answerDetails.sender.id)
+        val answerToDelete = question.get(answerDetails.sender.id)
         val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
         question.deleteAnswerByAuthor(answerDetails.sender.id)
         config.save()
 
-        channel.deleteMessageById(answerToDelete!!.embed).queue()
+        channel.deleteMessageById(answerToDelete!!.messageSnowflake).queue()
     }
 
     /**
@@ -116,8 +115,8 @@ class AnswerService(val config: ConfigService) {
                         text = "Answer page ${index + 1} of ${paginated.size}"
                     }
                     list.forEachIndexed { index, it ->
-                        val author = guild.getMemberById(it.sender)
-                        val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.answers}/${it.embed}"
+                        val author = guild.getMemberById(it.authorSnowflake)
+                        val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.answers}/${it.messageSnowflake}"
                         addField("${author!!.fullName()}:", "[Link]($link)", true)
 
                         // Add blank space to maintain 3 items width in line
@@ -129,10 +128,12 @@ class AnswerService(val config: ConfigService) {
     }
 
     /**
-     * Sends a question from the given guild
+     * Sends an answer for the given question
      *
      * @param guild the guild to send a question from
-     * @param id the question id to send
+     * @param question the question to answer
+     * @param answer the answer to reply with
+     * @param answerDetails the answer details
      */
     private fun sendAnswer(guild: Guild, question: Question, answer: Answer, answerDetails: AnswerDetails) {
         val state = config.getGuild(guild.id)
