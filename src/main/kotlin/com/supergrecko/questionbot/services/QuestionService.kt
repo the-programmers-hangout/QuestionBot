@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.dataclasses.GuildConfig
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
+import me.aberrantfox.kjdautils.discord.Discord
 import net.dv8tion.jda.api.entities.Guild
 import java.awt.Color
 
@@ -19,10 +20,19 @@ fun getGuild(id: String?): GuildConfig {
 }
 
 @Service
-class QuestionService(val config: ConfigService) {
+class QuestionService(val config: ConfigService, private val discord: Discord) {
     init {
         // Hacky way to extract guilds from service
         guilds = config.config.guilds
+    }
+
+    fun setPrefix(prefix: String, guild: Guild) {
+        config.config.prefix = prefix
+        discord.configuration.prefix = prefix
+
+        updateQuestions(guild)
+
+        config.save()
     }
 
     fun addQuestion(guild: Guild, sender: String, question: String, note: String = "") {
@@ -68,6 +78,15 @@ class QuestionService(val config: ConfigService) {
 
         state.config.deleteQuestion(question, orElse)
         config.save()
+    }
+
+    fun updateQuestions(guild: Guild) {
+        val state = config.getGuild(guild.id)
+        state.config.questions.forEach {
+            val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
+
+            channel.editMessageById(it.messageSnowflake, getEmbed(state, it)).queue()
+        }
     }
 
     fun sendQuestion(guild: Guild, id: Int) {
