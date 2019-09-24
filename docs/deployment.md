@@ -5,14 +5,25 @@ These are the requirements to set up the bot to run in production.
 - A bot token
 - Docker
 
-You can set the bot and run it by running the `deploy.sh` script. This will set up Docker and run the bot.
+## Pulling the Image
 
-The first run generates a file in `config/config.json`. Rerun the bot to actually start it.
+The bot has an already built docker image. This can be pulled like this:
 
-The deploy script takes one argument: The bot token.
+```
+docker pull docker.pkg.github.com/supergrecko/questionbot/questionbot:latest
+```           
 
-```bash  
-# Assuming you are in the root directory (the one with the README.md)
+## Running the bot
 
-./scripts/deploy.sh <your bot token here>
+Running the bot is also super simple.
+
+```                 
+# Run the bot to generate config files and to start the container
+docker run -e <your discord token> docker.pkg.github.com/supergrecko/questionbot/questionbot:latest      
+       
+# Get the container name
+docker ps -a            
+               
+# Restart the bot to actually run it
+docker restart <container name>
 ```
