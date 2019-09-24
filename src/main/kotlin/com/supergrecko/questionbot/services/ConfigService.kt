@@ -25,14 +25,6 @@ data class QGuild(
 @Service
 open class ConfigService(val config: BotConfig, private val discord: Discord, private val store: PersistenceService) {
 
-    // TODO: update question embeds
-    fun setPrefix(prefix: String = config.prefix) {
-        config.prefix = prefix
-        discord.configuration.prefix = prefix
-
-        save()
-    }
-
     fun setAdminRole(guild: String, role: String) {
         getGuild(guild).config.minRoleName = role
 

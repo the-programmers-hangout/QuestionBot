@@ -5,6 +5,7 @@ import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.services.LogChannels
+import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
@@ -13,7 +14,7 @@ import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("Configure")
-fun manageCommands(config: ConfigService) = commands {
+fun manageCommands(config: ConfigService, questions: QuestionService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
         requiresGuild = true
@@ -40,7 +41,7 @@ fun manageCommands(config: ConfigService) = commands {
 
         execute {
             val prefix = it.args.first() as String
-            config.setPrefix(prefix)
+            questions.setPrefix(prefix, it.guild!!)
 
             it.respond("Success, the bot prefix has been set to `$prefix`.")
         }
