@@ -12,7 +12,7 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
-@CommandSet("manage")
+@CommandSet("Configure")
 fun manageCommands(config: ConfigService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."

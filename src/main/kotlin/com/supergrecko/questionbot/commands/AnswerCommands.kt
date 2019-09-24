@@ -13,7 +13,7 @@ import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.respond
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 
-@CommandSet("answer")
+@CommandSet("Answer")
 fun answerCommands(config: ConfigService, answerService: AnswerService) = commands {
     command("answer") {
         description = "Answer a question"

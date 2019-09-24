@@ -12,7 +12,7 @@ import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
 import me.aberrantfox.kjdautils.internal.arguments.EitherArg
 import me.aberrantfox.kjdautils.internal.arguments.SplitterArg
 
-@CommandSet("ask")
+@CommandSet("Ask")
 fun questionCommands(config: ConfigService, questionService: QuestionService) = commands {
     command("ask") {
         description = "Ask the channel a question."
