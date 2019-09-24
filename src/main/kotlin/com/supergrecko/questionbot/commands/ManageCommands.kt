@@ -1,20 +1,26 @@
 package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
+import com.supergrecko.questionbot.dataclasses.AnswerDetails
+import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
+import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.services.LogChannels
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.extensions.jda.fullName
 import me.aberrantfox.kjdautils.internal.arguments.*
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("Configure")
-fun manageCommands(config: ConfigService, questions: QuestionService) = commands {
+fun manageCommands(config: ConfigService, questions: QuestionService, answerService: AnswerService) = commands {
     command("setrole") {
         description = "Set the lowest required role to invoke commands."
         requiresGuild = true
@@ -96,9 +102,20 @@ fun manageCommands(config: ConfigService, questions: QuestionService) = commands
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(MessageArg)
+        expect(QuestionArg, UserArg)
 
         execute {
+            val args = Arguments(it.args)
+            // These will always exist
+            val question = args.asType<Question>(0)
+            val user = args.asType<User>(1)
+            val details = AnswerDetails(user, question.id)
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                answerService.deleteAnswer(it.guild!!, details)
+                it.respond("Answer was deleted")
+            } else {
+                it.respond("${user.fullName()} has not answered Question #${question.id}")
+            }
         }
     }
 
@@ -107,9 +124,24 @@ fun manageCommands(config: ConfigService, questions: QuestionService) = commands
         requiresGuild = true
         permission = PermissionLevel.ADMIN
 
-        expect(MessageArg, QuestionArg)
+        expect(QuestionArg, UserArg, SentenceArg)
 
         execute {
+            val args = Arguments(it.args)
+            // These will always exist
+            val question = args.asType<Question>(0)
+            val user = args.asType<User>(1)
+            val answer = args.asType<String>(2)
+            val state = config.getGuild(it.guild?.id!!)
+            val details = AnswerDetails(user, question.id, answer)
+            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
+                    ?: it.guild!!.textChannels.first()
+            if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                it.respond("User ${user.fullName()} has already submitted an answer for Question ${question.id}")
+            } else {
+                answerService.addAnswer(it.guild!!, details)
+                it.respond("Answer for ${user.fullName()} posted in ${channel.asMention}")
+            }
         }
     }
 }
