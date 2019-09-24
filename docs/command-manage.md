@@ -4,12 +4,12 @@ These commands are used to configure the bot.
 
 ## Table of Contents
 
-- [AddAnswer](#addanswer)
-- [DelAnswer](#delanswer)
-- [EnableLogging](#enablelogging)
-- [SetChannel](#setchannel)
-- [SetPrefix](#setprefix)
-- [SetRole](#setrole)
+- [AddAnswer](#addanswer-admin-only)
+- [DelAnswer](#delanswer-admin-only)
+- [EnableLogging](#enablelogging-admin-only)
+- [SetChannel](#setchannel-admin-only)
+- [SetPrefix](#setprefix-admin-only)
+- [SetRole](#setrole-admin-only)
 
 ## AddAnswer (Admin Only)
 

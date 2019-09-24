@@ -4,8 +4,8 @@ These commands are used to manage new and already existing questions questions
 
 ## Table of Contents
 
-- [Ask](#ask)
-- [Question](#question)
+- [Ask](#ask-admin-only)
+- [Question](#question-admin-only)
 
 ## Ask (Admin Only)
 
