@@ -2,7 +2,7 @@
 
 These are the requirements to develop the bot.
 
-- Git (to clone, can also download .zip)
+- Git
 - JDK version 8+
 - IntelliJ IDEA
     - If you are not using IntelliJ IDEA you will need Maven as well.
