@@ -9,7 +9,7 @@ These are the requirements to set up the bot to run in production.
 
 The bot has an already built docker image. This can be pulled like this:
 
-```
+``bash
 docker pull docker.pkg.github.com/supergrecko/questionbot/questionbot:latest
 ```           
 
@@ -17,7 +17,7 @@ docker pull docker.pkg.github.com/supergrecko/questionbot/questionbot:latest
 
 Running the bot is also super simple.
 
-```                 
+```bash               
 # Run the bot to generate config files and to start the container
 docker run -e <your discord token> docker.pkg.github.com/supergrecko/questionbot/questionbot:latest      
        
