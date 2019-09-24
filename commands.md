@@ -10,7 +10,7 @@
 | -------- | --------- | -------------------- |
 | Help     | (Command) | Display a help menu. |
 
-## manage
+## Configure
 | Commands      | Arguments              | Description                                                       |
 | ------------- | ---------------------- | ----------------------------------------------------------------- |
 | addanswer     | MessageID, Question    | Manually add an already existing message as a reply to a question |
@@ -20,13 +20,13 @@
 | setprefix     | Word                   | Sets the bot prefix.                                              |
 | setrole       | Role                   | Set the lowest required role to invoke commands.                  |
 
-## ask
+## Ask
 | Commands | Arguments                                | Description                 |
 | -------- | ---------------------------------------- | --------------------------- |
 | ask      | (Separated\|Text)                        | Ask the channel a question. |
 | question | ChoiceArg, Question, ((Separated\|Text)) | Edit or delete a question   |
 
-## answer
+## Answer
 | Commands | Arguments      | Description                      |
 | -------- | -------------- | -------------------------------- |
 | answer   | Question, Text | Answer a question                |
