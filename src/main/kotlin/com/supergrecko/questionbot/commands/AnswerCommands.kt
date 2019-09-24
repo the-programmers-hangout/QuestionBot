@@ -29,7 +29,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val answer = args.asType<String>(1)
 
             val state = config.getGuild(it.guild?.id!!)
-            val details = AnswerDetails(it.author, it.message.id, question.id, answer)
+            val details = AnswerDetails(it.author, question.id, answer)
 
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
                     ?: it.guild!!.textChannels.first()
@@ -54,7 +54,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
             val answer = args.asType<String>(1)
-            val details = AnswerDetails(it.author, it.message.id, question.id, answer)
+            val details = AnswerDetails(it.author, question.id, answer)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.editAnswer(it.guild!!, details)
@@ -75,7 +75,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         execute {
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
-            val details = AnswerDetails(it.author, it.message.id, question.id)
+            val details = AnswerDetails(it.author, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.deleteAnswer(it.guild!!, details)

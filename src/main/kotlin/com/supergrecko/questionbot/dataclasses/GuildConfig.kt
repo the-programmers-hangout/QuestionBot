@@ -18,11 +18,6 @@ data class GuildConfig(
         val channels: GuildChannels = GuildChannels(),
         val questions: MutableList<Question> = mutableListOf()
 ) {
-    /**
-     * Adds a question to the guild
-     *
-     * @param question the question to add
-     */
     fun addQuestion(question: Question) = questions.add(question)
 
     /**

@@ -19,35 +19,12 @@ data class Question(
         var question: String = "",
         var note: String = ""
 ) {
-    /**
-     * Edit a question's question and note
-     *
-     * @param question the question to ask
-     * @param note the question note, if any
-     */
     fun edit(question: String, note: String) = run {
         this.note = note
         this.question = question
     }
 
-    /**
-     * Adds an answer
-     *
-     * @param answer the answer to add
-     */
     fun add(answer: Answer) = responses.add(answer)
-
-    /**
-     * Gets an answer. This is safe because each user can only reply once to each question.
-     *
-     * @param author the snowflake of the author.
-     */
     fun get(author: String) = responses.find{ it.authorSnowflake == author }
-
-    /**
-     * Deletes an answer from the given author. This is safe because each user can only reply once to each question.
-     *
-     * @param author the snowflake of the author to delete
-     */
     fun deleteBy(author: String) = responses.removeAll{ it.authorSnowflake == author }
 }
