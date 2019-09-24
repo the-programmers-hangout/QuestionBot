@@ -16,18 +16,15 @@ class InfoService(private val configuration: BotConfig) {
 
     private val project = Gson().fromJson(propFile, Properties::class.java)
 
-    /**
-     * Gets the bot info embed
-     *
-     * @param guild guild which called the function
-     */
     fun infoEmbed(guild: Guild) = embed {
         val self = guild.jda.selfUser
 
         // TODO: add more fields
         color = Color(0xfb8c00)
         thumbnail = self.effectiveAvatarUrl
+
         addField(self.fullName(), "QuestionBot")
+
         addInlineField("Prefix", configuration.prefix)
         addInlineField("Version", project.version)
         addInlineField("Source", project.repository)

@@ -9,7 +9,7 @@ These are the requirements to set up the bot to run in production.
 
 The bot has an already built docker image. This can be pulled like this:
 
-``bash
+```bash
 docker pull docker.pkg.github.com/supergrecko/questionbot/questionbot:latest
 ```           
 

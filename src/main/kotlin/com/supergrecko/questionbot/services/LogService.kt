@@ -9,11 +9,6 @@ import java.awt.Color
 @Service
 class LogService(val config: ConfigService) {
 
-    /**
-     * Logs an event
-     *
-     * @param event the invoked command
-     */
     fun log(event: CommandEvent) {
         val state = config.getGuild(event.guild!!.id)
 
@@ -24,11 +19,6 @@ class LogService(val config: ConfigService) {
         getChannel(event)?.sendMessage(createEmbed(event))?.queue()
     }
 
-    /**
-     * Creates a log record embed
-     *
-     * @param event the invoked command
-     */
     private fun createEmbed(event: CommandEvent) = embed {
         val link = "https://discordapp.com/channels/${event.guild?.id}/${event.channel.id}/${event.message.id}"
 
@@ -50,11 +40,6 @@ class LogService(val config: ConfigService) {
         }
     }
 
-    /**
-     * Pulls the TextChannel which the bog uses to log
-     *
-     * @param event the command invocation
-     */
     private fun getChannel(event: CommandEvent): TextChannel? {
         val state = config.getGuild(event.guild!!.id)
 
