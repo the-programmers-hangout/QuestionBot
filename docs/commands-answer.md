@@ -13,6 +13,11 @@ These commands are invoked by the community to reply to the bounty questions.
 
 Answers a bounty question. Each user can only answer a question once.
 
+**Example**
+
+![Example](/.github/assets/commands/answer-example-1.png)
+![Example](/.github/assets/commands/answer-example-2.png)
+
 **Syntax**
 
 ```
@@ -28,6 +33,10 @@ $answer <id> <answer>
 
 Deletes your answer for a question
 
+**Example**
+                 
+![Example](/.github/assets/commands/answer-delete-example.png)
+
 **Syntax**
 
 ```
@@ -41,6 +50,11 @@ $delete <id>
 ## Edit
 
 Edits your answer to a question
+
+**Example**
+
+![Example](/.github/assets/commands/answer-edit-example-1.png)
+![Example](/.github/assets/commands/answer-edit-example-2.png)
 
 **Syntax**
 
@@ -56,6 +70,10 @@ $edit <question> <answer>
 ## List
 
 Lists all the responses to a question, if any
+
+**Example**
+
+![Example](/.github/assets/commands/answer-list-example.png)
 
 **Syntax**
 

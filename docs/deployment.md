@@ -19,11 +19,11 @@ Running the bot is also super simple.
 
 ```bash               
 # Run the bot to generate config files and to start the container
-docker run -e <your discord token> docker.pkg.github.com/supergrecko/questionbot/questionbot:latest      
+docker run -e DISCORD_TOKEN=your-discord-token docker.pkg.github.com/supergrecko/questionbot/questionbot:latest      
        
 # Get the container name
 docker ps -a            
                
 # Restart the bot to actually run it
-docker restart <container name>
+docker restart the-container-name
 ```

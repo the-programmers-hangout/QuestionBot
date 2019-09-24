@@ -14,6 +14,7 @@ All the documentation for QuestionBot can be found inside the [docs](/docs) fold
 - [deployment](/docs/deployment.md): How to deploy the bot via Docker
 - [commands-ask](/docs/commands-ask.md): The ask command list
 - [commands-manage](/docs/command-manage.md): The configuration command list
+- [commands-answer](/docs/commands-answer.md): The answer command list
 
 ## License
 
