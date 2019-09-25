@@ -7,9 +7,11 @@ import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
-import me.aberrantfox.kjdautils.api.dsl.*
+import me.aberrantfox.kjdautils.api.dsl.CommandSet
+import me.aberrantfox.kjdautils.api.dsl.CommandEvent
+import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.arg
 import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
-import me.aberrantfox.kjdautils.internal.arguments.EitherArg
 import me.aberrantfox.kjdautils.internal.arguments.SplitterArg
 
 @CommandSet("Ask")
@@ -34,7 +36,7 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         }
     }
 
-    command("question") {
+    command("Question") {
         description = "Edit or delete a question"
         requiresGuild = true
         permission = PermissionLevel.ADMIN

@@ -13,15 +13,19 @@ import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.extensions.jda.fullName
-import me.aberrantfox.kjdautils.internal.arguments.*
-import net.dv8tion.jda.api.entities.Message
+import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
+import me.aberrantfox.kjdautils.internal.arguments.RoleArg
+import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
+import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.UserArg
+import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("Configure")
 fun manageCommands(config: ConfigService, questions: QuestionService, answerService: AnswerService) = commands {
-    command("setrole") {
+    command("SetRole") {
         description = "Set the lowest required role to invoke commands."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -38,7 +42,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         }
     }
 
-    command("setprefix") {
+    command("SetPrefix") {
         description = "Sets the bot prefix."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -53,7 +57,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         }
     }
 
-    command("setchannel") {
+    command("SetChannel") {
         description = "Sets the output channel for the given argument."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -79,7 +83,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         }
     }
 
-    command("enablelogging") {
+    command("EnableLogging") {
         description = "Enables / Disables bot logging"
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -97,7 +101,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         }
     }
 
-    command("delanswer") {
+    command("DelAnswer") {
         description = "Delete an answer from a question."
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -110,6 +114,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val question = args.asType<Question>(0)
             val user = args.asType<User>(1)
             val details = AnswerDetails(user, question.id)
+
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.deleteAnswer(it.guild!!, details)
                 it.respond("Answer was deleted")
@@ -119,7 +124,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         }
     }
 
-    command("addanswer") {
+    command("AddAnswer") {
         description = "Manually add an already existing message as a reply to a question"
         requiresGuild = true
         permission = PermissionLevel.ADMIN
@@ -132,10 +137,13 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val question = args.asType<Question>(0)
             val user = args.asType<User>(1)
             val answer = args.asType<String>(2)
+
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(user, question.id, answer)
+
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
                     ?: it.guild!!.textChannels.first()
+
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 it.respond("User ${user.fullName()} has already submitted an answer for Question ${question.id}")
             } else {
