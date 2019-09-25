@@ -4,9 +4,9 @@ import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.api.dsl.embed
 import java.awt.Color
-import java.util.*
+import java.util.Date
 
-val startTime = Date()
+private val startTime = Date()
 
 @CommandSet("Utility")
 fun utilityCommands() = commands {

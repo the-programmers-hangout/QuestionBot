@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
             globalPath = "com.supergrecko.questionbot"
 
             deleteMode = PrefixDeleteMode.Double
-            documentationSortOrder = arrayListOf("core", "utility", "config")
+            documentationSortOrder = listOf("Ask", "Answer", "Configure", "Utility")
 
             reactToCommands = false
         }
