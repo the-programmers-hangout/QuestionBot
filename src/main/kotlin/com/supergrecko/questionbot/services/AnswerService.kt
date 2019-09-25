@@ -9,6 +9,7 @@ import me.aberrantfox.kjdautils.api.dsl.Menu
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.api.dsl.menu
 import me.aberrantfox.kjdautils.extensions.jda.fullName
+import me.aberrantfox.kjdautils.extensions.jda.getHighestRole
 import net.dv8tion.jda.api.entities.Guild
 import java.awt.Color
 
@@ -119,7 +120,7 @@ class AnswerService(val config: ConfigService) {
         val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.questions}/${answerDetails.questionId}"
 
         val author = state.guild.getMemberById(answerDetails.sender.id)
-        color = Color(0xfb8c00)
+        color = author?.getHighestRole()?.color ?: Color(0xfb8c00)
         title = "Answering Question #${answerDetails.questionId}:"
         description = question.question
 
