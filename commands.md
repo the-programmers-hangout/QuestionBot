@@ -6,15 +6,17 @@
 | (Argument) | This argument is optional. |
 
 ## Utility
-| Commands | Arguments | Description          |
-| -------- | --------- | -------------------- |
-| Help     | (Command) | Display a help menu. |
+| Commands | Arguments | Description                                 |
+| -------- | --------- | ------------------------------------------- |
+| Help     | (Command) | Display a help menu.                        |
+| Ping     | <none>    | Display the network ping of the bot.        |
+| Uptime   | <none>    | Displays how long the bot has been running. |
 
 ## Configure
 | Commands      | Arguments              | Description                                                       |
 | ------------- | ---------------------- | ----------------------------------------------------------------- |
-| addanswer     | MessageID, Question    | Manually add an already existing message as a reply to a question |
-| delanswer     | MessageID              | Delete an answer from a question.                                 |
+| addanswer     | Question, User, Text   | Manually add an already existing message as a reply to a question |
+| delanswer     | Question, User         | Delete an answer from a question.                                 |
 | enablelogging | ChoiceArg              | Enables / Disables bot logging                                    |
 | setchannel    | ChoiceArg, TextChannel | Sets the output channel for the given argument.                   |
 | setprefix     | Word                   | Sets the bot prefix.                                              |

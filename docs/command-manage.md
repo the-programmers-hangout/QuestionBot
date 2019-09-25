@@ -15,6 +15,11 @@ These commands are used to configure the bot.
 
 Adds an answer from a user for the given question
 
+**Example**
+![Example](/.github/assets/commands/addanswer-id.png)
+![Example](/.github/assets/commands/addanswer-mention.png)
+![Example](/.github/assets/commands/addanswer-answer.png)
+
 **Syntax**
 
 ```
@@ -28,10 +33,14 @@ $addanswer <question> <user> <answer>
 - `answer`: The text answer 
 
 ## DelAnswer (Admin Only)
-    
-**Syntax**
 
 Deletes the answer from given user for given question
+
+**Example**
+![Example](/.github/assets/commands/delanswer-id.png)
+![Example](/.github/assets/commands/delanswer-mention.png)
+
+**Syntax**
 
 ```
 $delanswer <question> <user>
