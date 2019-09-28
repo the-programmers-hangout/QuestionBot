@@ -11,14 +11,12 @@ import com.supergrecko.questionbot.services.LogChannels
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
+import me.aberrantfox.kjdautils.api.dsl.arg
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.extensions.jda.fullName
-import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
-import me.aberrantfox.kjdautils.internal.arguments.RoleArg
-import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
-import me.aberrantfox.kjdautils.internal.arguments.UserArg
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
+import me.aberrantfox.kjdautils.internal.arguments.*
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.internal.entities.RoleImpl
 import net.dv8tion.jda.internal.entities.TextChannelImpl
@@ -119,7 +117,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
                 answerService.deleteAnswer(it.guild!!, details)
                 it.respond("Answer was deleted")
             } else {
-                it.respond("${user.fullName()} has not answered Question #${question.id}")
+                it.respond("${user.fullName()} has not answered Question #${question.id}.")
             }
         }
     }
@@ -137,18 +135,63 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val question = args.asType<Question>(0)
             val user = args.asType<User>(1)
             val answer = args.asType<String>(2)
-
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(user, question.id, answer)
-
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
                     ?: it.guild!!.textChannels.first()
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
-                it.respond("User ${user.fullName()} has already submitted an answer for Question ${question.id}")
+                it.respond("User ${user.fullName()} has already submitted an answer for Question ${question.id}.")
             } else {
                 answerService.addAnswer(it.guild!!, details)
                 it.respond("Answer for ${user.fullName()} posted in ${channel.asMention}")
+            }
+        }
+    }
+
+    command("ConvertAnswer") {
+        description = "Converts an existing message to a QuestionBot answer"
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(QuestionArg, MessageArg, TextChannelArg)
+
+        execute {
+            val args = Arguments(it.args)
+            val question = args.asType<Question>(0)
+            val messageId = args.asType<Message>(1)
+            val channel = args.asType<TextChannel>(2)
+
+            channel.retrieveMessageById(messageId.id).queue{message ->
+                val details = AnswerDetails(message.author, question.id, message.contentRaw)
+                if (answerService.questionAnsweredByUser(it.guild!!, details)) {
+                    it.respond("User ${message.author.fullName()} has already submitted an answer for Question ${question.id}.")
+                } else {
+                    answerService.addAnswer(it.guild!!, details)
+                    it.respond("Answer for ${message.author.fullName()} posted.")
+                }
+            }
+        }
+    }
+
+    command("ConvertQuestion") {
+        description = "Converts an existing message to a QuestionBot question"
+        requiresGuild = true
+        permission = PermissionLevel.ADMIN
+
+        expect(arg(MessageArg), arg(TextChannelArg),  arg(SentenceArg, optional = true, default = ""))
+
+        execute {
+            val args = Arguments(it.args)
+            val messageId = args.asType<Message>(0)
+            val channel = args.asType<TextChannel>(1)
+            val note = args.asType<String>(2)
+            val state = config.getGuild(it.guild?.id!!)
+
+            channel.retrieveMessageById(messageId.id).queue{message ->
+                questions.addQuestion(it.guild!!, message.author.id, message.contentRaw, note)
+                questions.sendQuestion(it.guild!!, state.config.count)
+                it.respond("Message ${message.id} converted to question and posted.")
             }
         }
     }

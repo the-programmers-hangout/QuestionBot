@@ -51,6 +51,45 @@ $delanswer <question> <user>
 - `question`: The question id to delete an answer from
 - `user`: The user snowflake to delete answer from
 
+## ConvertQuestion (Admin Only)
+
+Convert a given message in a given channel to a new QuestionBot question.
+
+**Example**
+![Example](/.github/assets/commands/convertquestion-example-1.PNG)
+![Example](/.github/assets/commands/convertquestion-example-2.PNG)
+
+**Syntax**
+
+```
+convertquestion <messageid> <channel> <note> (optional)
+```              
+
+**Arguments**      
+
+- `messageid`: The message id for the message to be converted
+- `channel`: The channel the message id is posted in
+- `note`: Text to be added as a note to the question (optional)
+
+## ConvertAnswer (Admin Only)
+
+Convert a given message in a given channel to a new QuestionBot answer.
+
+**Example**
+![Example](/.github/assets/commands/convertanswer-example-1.PNG)
+
+**Syntax**
+
+```
+convertanswer <question> <messageid> <channel> 
+```              
+
+**Arguments**      
+
+- `question`: The question id to add the answer to
+- `messageid`: The message id for the message to be converted
+- `channel`: The channel the message id is posted in
+
 ## EnableLogging (Admin Only)
 
 Toggles logging command invocations.
