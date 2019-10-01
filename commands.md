@@ -20,14 +20,16 @@
 | List     | Question       | List answers to a given question |
 
 ## Configure
-| Commands      | Arguments              | Description                                                       |
-| ------------- | ---------------------- | ----------------------------------------------------------------- |
-| AddAnswer     | Question, User, Text   | Manually add an already existing message as a reply to a question |
-| DelAnswer     | Question, User         | Delete an answer from a question.                                 |
-| EnableLogging | ChoiceArg              | Enables / Disables bot logging                                    |
-| SetChannel    | ChoiceArg, TextChannel | Sets the output channel for the given argument.                   |
-| SetPrefix     | Word                   | Sets the bot prefix.                                              |
-| SetRole       | Role                   | Set the lowest required role to invoke commands.                  |
+| Commands        | Arguments                        | Description                                                       |
+| --------------- | -------------------------------- | ----------------------------------------------------------------- |
+| AddAnswer       | Question, User, Text             | Manually add an already existing message as a reply to a question |
+| ConvertAnswer   | Question, MessageID, TextChannel | Converts an existing message to a QuestionBot answer              |
+| ConvertQuestion | MessageID, TextChannel, (Text)   | Converts an existing message to a QuestionBot question            |
+| DelAnswer       | Question, User                   | Delete an answer from a question.                                 |
+| EnableLogging   | ChoiceArg                        | Enables / Disables bot logging                                    |
+| SetChannel      | ChoiceArg, TextChannel           | Sets the output channel for the given argument.                   |
+| SetPrefix       | Word                             | Sets the bot prefix.                                              |
+| SetRole         | Role                             | Set the lowest required role to invoke commands.                  |
 
 ## Utility
 | Commands | Arguments | Description                                 |
