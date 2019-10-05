@@ -25,7 +25,6 @@ import net.dv8tion.jda.internal.entities.TextChannelImpl
 fun manageCommands(config: ConfigService, questions: QuestionService, answerService: AnswerService) = commands {
     command("SetRole") {
         description = "Set the lowest required role to invoke commands."
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(RoleArg)
@@ -42,7 +41,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("SetPrefix") {
         description = "Sets the bot prefix."
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(WordArg)
@@ -57,7 +55,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("SetChannel") {
         description = "Sets the output channel for the given argument."
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(ChoiceArg("ChoiceArg", "log", "questions", "answers", "replyto"), TextChannelArg)
@@ -83,7 +80,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("EnableLogging") {
         description = "Enables / Disables bot logging"
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(ChoiceArg("ChoiceArg", "on", "off"))
@@ -101,7 +97,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("DelAnswer") {
         description = "Delete an answer from a question."
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(QuestionArg, UserArg)
@@ -124,7 +119,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("AddAnswer") {
         description = "Manually add an already existing message as a reply to a question"
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(QuestionArg, UserArg, SentenceArg)
@@ -151,7 +145,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("ConvertAnswer") {
         description = "Converts an existing message to a QuestionBot answer"
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(QuestionArg, MessageArg, TextChannelArg)
@@ -176,7 +169,6 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
 
     command("ConvertQuestion") {
         description = "Converts an existing message to a QuestionBot question"
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(arg(MessageArg), arg(TextChannelArg),  arg(SentenceArg, optional = true, default = ""))

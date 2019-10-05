@@ -17,7 +17,6 @@ import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 fun answerCommands(config: ConfigService, answerService: AnswerService) = commands {
     command("Answer") {
         description = "Answer a question"
-        requiresGuild = true
         permission = PermissionLevel.EVERYONE
 
         expect(QuestionArg, SentenceArg)
@@ -45,7 +44,6 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
     command("Edit") {
         description = "Edit an answer to a question"
-        requiresGuild = true
         permission = PermissionLevel.EVERYONE
 
         expect(QuestionArg, SentenceArg)
@@ -67,7 +65,6 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
     command("Delete") {
         description = "Delete an answer to a question"
-        requiresGuild = true
         permission = PermissionLevel.EVERYONE
 
         expect(QuestionArg)
@@ -88,7 +85,6 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
     command("List") {
         description = "List answers to a given question"
-        requiresGuild = true
         permission = PermissionLevel.EVERYONE
 
         expect(QuestionArg)
