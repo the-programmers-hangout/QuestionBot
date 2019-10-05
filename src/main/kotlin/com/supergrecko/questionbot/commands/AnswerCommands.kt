@@ -30,8 +30,9 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
 
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(it.author, question.id, answer)
-            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
-                    ?: return@execute it.invalidChannel()
+
+            // This is always valid because the precondition checks the channel's existence
+            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)!!
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 it.respond("You have already answered Question#${question.id}. Check ${channel.asMention}")
