@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.AnswerDetails
 import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
+import com.supergrecko.questionbot.extensions.invalidChannel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
@@ -132,7 +133,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(user, question.id, answer)
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
-                    ?: it.guild!!.textChannels.first()
+                    ?: return@execute it.invalidChannel()
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 it.respond("User ${user.fullName()} has already submitted an answer for Question ${question.id}.")

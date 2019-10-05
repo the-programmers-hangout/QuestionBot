@@ -11,4 +11,6 @@ data class GuildChannels(
         var logs: String = "0",
         var questions: String = "0",
         var answers: String = "0"
-)
+) {
+    fun valid() = logs != "0" && questions != "0" && answers != "0"
+}
