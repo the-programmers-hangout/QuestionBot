@@ -12,12 +12,6 @@ class ReadyListener(private val config: ConfigService, private val questions: Qu
      */
     @Subscribe
     fun onReady(event: ReadyEvent) {
-        config.registerGuilds()
-
-        event.jda.guilds.forEach {
-            questions.setPrefix(config.config.prefix, it)
-        }
-
-        config.save()
+        println("Hi")
     }
 }

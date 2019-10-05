@@ -18,7 +18,6 @@ import me.aberrantfox.kjdautils.internal.arguments.SplitterArg
 fun questionCommands(config: ConfigService, questionService: QuestionService) = commands {
     command("ask") {
         description = "Ask the channel a question."
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(SplitterArg)
@@ -38,7 +37,6 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
 
     command("Question") {
         description = "Edit or delete a question"
-        requiresGuild = true
         permission = PermissionLevel.ADMIN
 
         expect(
