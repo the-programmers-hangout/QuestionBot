@@ -16,7 +16,7 @@ import me.aberrantfox.kjdautils.internal.command.Pass
  * @param config dependency injected config
  * @param logger dependency injected logger
  */
-@Precondition
+@Precondition(20)
 fun canInvoke(config: ConfigService, logger: LogService) = precondition {
     val state = config.getGuild(it.guild!!.id)
 
