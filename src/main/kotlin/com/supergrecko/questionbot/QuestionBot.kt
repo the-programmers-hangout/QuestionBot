@@ -20,6 +20,7 @@ fun main(args: Array<String>) {
         configure {
             allowPrivateMessages = false
 
+            prefix = "$"
             deleteMode = PrefixDeleteMode.Double
             documentationSortOrder = listOf("Ask", "Answer", "Configure", "Utility")
 

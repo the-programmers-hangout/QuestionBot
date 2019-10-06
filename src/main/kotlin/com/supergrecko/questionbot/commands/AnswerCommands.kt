@@ -4,6 +4,7 @@ import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.AnswerDetails
 import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
+import com.supergrecko.questionbot.extensions.invalidChannel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
@@ -30,8 +31,8 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerDetails(it.author, question.id, answer)
 
-            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)
-                    ?: it.guild!!.textChannels.first()
+            // This is always valid because the precondition checks the channel's existence
+            val channel = it.guild!!.getTextChannelById(state.config.channels.answers)!!
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 it.respond("You have already answered Question#${question.id}. Check ${channel.asMention}")

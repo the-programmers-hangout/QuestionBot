@@ -93,7 +93,8 @@ class QuestionService(val config: ConfigService, private val discord: Discord) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(id)
 
-        val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
+        // This is always valid because the precondition checks the channel's existence
+        val channel = guild.getTextChannelById(state.config.channels.questions)!!
 
         channel.sendMessage(getEmbed(state, question)).queue {
             state.getQuestion(id).messageSnowflake = it.id
