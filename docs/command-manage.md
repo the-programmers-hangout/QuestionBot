@@ -39,6 +39,7 @@ Deletes the answer from given user for given question
 **Example**
 
 ![Example](/.github/assets/commands/delanswer-id.png)
+
 ![Example](/.github/assets/commands/delanswer-mention.png)
 
 **Syntax**
