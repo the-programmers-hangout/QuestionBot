@@ -1,6 +1,6 @@
 package com.supergrecko.questionbot.arguments
 
-import com.supergrecko.questionbot.services.getGuild
+import com.supergrecko.questionbot.services.guildFromId
 import me.aberrantfox.kjdautils.api.dsl.CommandEvent
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType
@@ -29,7 +29,7 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
      * @param event the command invocation
      */
     override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
-        val config = getGuild(event.guild?.id)
+        val config = guildFromId(event.guild?.id)
 
         // Gets the first question with that id
         val question = config.questions.firstOrNull { it.id.toString() == arg }

@@ -1,10 +1,9 @@
 package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
-import com.supergrecko.questionbot.dataclasses.AnswerDetails
+import com.supergrecko.questionbot.dataclasses.AnswerImpl
 import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
-import com.supergrecko.questionbot.extensions.invalidChannel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
@@ -29,7 +28,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val answer = args.asType<String>(1)
 
             val state = config.getGuild(it.guild?.id!!)
-            val details = AnswerDetails(it.author, question.id, answer)
+            val details = AnswerImpl(it.author, question.id, answer)
 
             // This is always valid because the precondition checks the channel's existence
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)!!
@@ -53,7 +52,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
             val answer = args.asType<String>(1)
-            val details = AnswerDetails(it.author, question.id, answer)
+            val details = AnswerImpl(it.author, question.id, answer)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.editAnswer(it.guild!!, details)
@@ -73,7 +72,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         execute {
             val args = Arguments(it.args)
             val question = args.asType<Question>(0)
-            val details = AnswerDetails(it.author, question.id)
+            val details = AnswerImpl(it.author, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.deleteAnswer(it.guild!!, details)

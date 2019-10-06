@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.User
 @Service
 open class VisibilityService(config: ConfigService, discord: Discord) {
     init {
-        discord.configuration.visibilityPredicate = { command: Command, user: User, messageChannel: MessageChannel, guild: Guild? ->
+        discord.configuration.visibilityPredicate = { command: Command, user: User, _: MessageChannel, guild: Guild? ->
             val isAdmin = user.toMember(guild!!)?.roles?.any { it.name == config.getGuild(guild.id).config.minRoleName }
 
             when {
