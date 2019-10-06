@@ -1,6 +1,6 @@
 package com.supergrecko.questionbot.services
 
-import com.supergrecko.questionbot.dataclasses.GuildConfig
+import com.supergrecko.questionbot.dataclasses.GuildImpl
 import com.supergrecko.questionbot.dataclasses.Question
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -8,24 +8,8 @@ import me.aberrantfox.kjdautils.discord.Discord
 import net.dv8tion.jda.api.entities.Guild
 import java.awt.Color
 
-private lateinit var guilds: MutableList<GuildConfig>
-
-/**
- * Get a guild by its id
- *
- * @param id the guild snowflake
- */
-fun getGuild(id: String?): GuildConfig {
-    return guilds.first { it.guildSnowflake == id }
-}
-
 @Service
 class QuestionService(val config: ConfigService, private val discord: Discord) {
-    init {
-        // Hacky way to extract guilds from service
-        guilds = config.config.guilds
-    }
-
     fun setPrefix(prefix: String, guild: Guild) {
         config.config.prefix = prefix
         discord.configuration.prefix = prefix
@@ -80,7 +64,7 @@ class QuestionService(val config: ConfigService, private val discord: Discord) {
         config.save()
     }
 
-    fun updateQuestions(guild: Guild) {
+    private fun updateQuestions(guild: Guild) {
         val state = config.getGuild(guild.id)
         state.config.questions.forEach {
             val channel = guild.getTextChannelById(state.config.channels.questions) ?: guild.textChannels.first()
@@ -105,7 +89,7 @@ class QuestionService(val config: ConfigService, private val discord: Discord) {
     /**
      * Generates the RichEmbed for the given question
      */
-    private fun getEmbed(state: QGuild, question: Question) = embed {
+    private fun getEmbed(state: GuildImpl, question: Question) = embed {
         val author = state.guild.getMemberById(question.authorSnowflake)!!
 
         color = Color(0xfb8c00)

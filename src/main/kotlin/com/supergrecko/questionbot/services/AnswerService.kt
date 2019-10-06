@@ -1,9 +1,6 @@
 package com.supergrecko.questionbot.services
 
-import com.supergrecko.questionbot.dataclasses.Answer
-import com.supergrecko.questionbot.dataclasses.AnswerDetails
-import com.supergrecko.questionbot.dataclasses.GuildConfig
-import com.supergrecko.questionbot.dataclasses.Question
+import com.supergrecko.questionbot.dataclasses.*
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.Menu
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -13,16 +10,9 @@ import me.aberrantfox.kjdautils.extensions.jda.getHighestRole
 import net.dv8tion.jda.api.entities.Guild
 import java.awt.Color
 
-private lateinit var guilds: MutableList<GuildConfig>
-
 @Service
 class AnswerService(val config: ConfigService) {
-    init {
-        // Hacky way to extract guilds from service
-        guilds = config.config.guilds
-    }
-
-    fun addAnswer(guild: Guild, answerDetails: AnswerDetails) {
+    fun addAnswer(guild: Guild, answerDetails: AnswerImpl) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
         val answer = Answer(authorSnowflake = answerDetails.sender.id)
@@ -32,7 +22,7 @@ class AnswerService(val config: ConfigService) {
         sendAnswer(guild, question, answer, answerDetails)
     }
 
-    fun questionAnsweredByUser(guild: Guild, answerDetails: AnswerDetails): Boolean {
+    fun questionAnsweredByUser(guild: Guild, answerDetails: AnswerImpl): Boolean {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
         if (question.responses.any { it.authorSnowflake == answerDetails.sender.id }) {
@@ -41,7 +31,7 @@ class AnswerService(val config: ConfigService) {
         return false
     }
 
-    fun editAnswer(guild: Guild, answerDetails: AnswerDetails) {
+    fun editAnswer(guild: Guild, answerDetails: AnswerImpl) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
         val answerToUpdate = question.get(answerDetails.sender.id)
@@ -51,7 +41,7 @@ class AnswerService(val config: ConfigService) {
         channel.editMessageById(answerToUpdate!!.messageSnowflake, getEmbed(state, question, answerDetails)).queue()
     }
 
-    fun deleteAnswer(guild: Guild, answerDetails: AnswerDetails) {
+    fun deleteAnswer(guild: Guild, answerDetails: AnswerImpl) {
         val state = config.getGuild(guild.id)
         val question = state.getQuestion(answerDetails.questionId)
         val answerToDelete = question.get(answerDetails.sender.id)
@@ -101,7 +91,7 @@ class AnswerService(val config: ConfigService) {
         }
     }
 
-    private fun sendAnswer(guild: Guild, question: Question, answer: Answer, answerDetails: AnswerDetails) {
+    private fun sendAnswer(guild: Guild, question: Question, answer: Answer, answerDetails: AnswerImpl) {
         val state = config.getGuild(guild.id)
         val channel = guild.getTextChannelById(state.config.channels.answers) ?: guild.textChannels.first()
 
@@ -116,7 +106,7 @@ class AnswerService(val config: ConfigService) {
     /**
      * Generate the RichEmbed for an answer
      */
-    private fun getEmbed(state: QGuild, question: Question, answerDetails: AnswerDetails) = embed {
+    private fun getEmbed(state: GuildImpl, question: Question, answerDetails: AnswerImpl) = embed {
         val link = "https://discordapp.com/channels/${state.guild.id}/${state.config.channels.questions}/${answerDetails.questionId}"
 
         val author = state.guild.getMemberById(answerDetails.sender.id)

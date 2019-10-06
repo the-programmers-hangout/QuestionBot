@@ -1,14 +1,13 @@
 package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
-import com.supergrecko.questionbot.dataclasses.AnswerDetails
+import com.supergrecko.questionbot.dataclasses.AnswerImpl
 import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
-import com.supergrecko.questionbot.extensions.invalidChannel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
-import com.supergrecko.questionbot.services.LogChannels
+import com.supergrecko.questionbot.dataclasses.LogChannels
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
@@ -107,7 +106,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             // These will always exist
             val question = args.asType<Question>(0)
             val user = args.asType<User>(1)
-            val details = AnswerDetails(user, question.id)
+            val details = AnswerImpl(user, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                 answerService.deleteAnswer(it.guild!!, details)
@@ -131,7 +130,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val user = args.asType<User>(1)
             val answer = args.asType<String>(2)
             val state = config.getGuild(it.guild?.id!!)
-            val details = AnswerDetails(user, question.id, answer)
+            val details = AnswerImpl(user, question.id, answer)
 
             // This is always valid because the precondition checks the channel's existence
             val channel = it.guild!!.getTextChannelById(state.config.channels.answers)!!
@@ -157,8 +156,8 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val messageId = args.asType<Message>(1)
             val channel = args.asType<TextChannel>(2)
 
-            channel.retrieveMessageById(messageId.id).queue{message ->
-                val details = AnswerDetails(message.author, question.id, message.contentRaw)
+            channel.retrieveMessageById(messageId.id).queue { message ->
+                val details = AnswerImpl(message.author, question.id, message.contentRaw)
                 if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                     it.respond("User ${message.author.fullName()} has already submitted an answer for Question ${question.id}.")
                 } else {
@@ -173,7 +172,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Converts an existing message to a QuestionBot question"
         permission = PermissionLevel.ADMIN
 
-        expect(arg(MessageArg), arg(TextChannelArg),  arg(SentenceArg, optional = true, default = ""))
+        expect(arg(MessageArg), arg(TextChannelArg), arg(SentenceArg, optional = true, default = ""))
 
         execute {
             val args = Arguments(it.args)
@@ -182,7 +181,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
             val note = args.asType<String>(2)
             val state = config.getGuild(it.guild?.id!!)
 
-            channel.retrieveMessageById(messageId.id).queue{message ->
+            channel.retrieveMessageById(messageId.id).queue { message ->
                 questions.addQuestion(it.guild!!, message.author.id, message.contentRaw, note)
                 questions.sendQuestion(it.guild!!, state.config.count)
                 it.respond("Message ${message.id} converted to question and posted.")

@@ -2,28 +2,25 @@ package com.supergrecko.questionbot.services
 
 import com.supergrecko.questionbot.dataclasses.BotConfig
 import com.supergrecko.questionbot.dataclasses.GuildConfig
-import com.supergrecko.questionbot.services.getGuild as getConfig
+import com.supergrecko.questionbot.dataclasses.GuildImpl
+import com.supergrecko.questionbot.dataclasses.LogChannels
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.internal.di.PersistenceService
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
-enum class LogChannels {
-    QUESTION,
-    ANSWER,
-    LOG
-}
+private lateinit var guilds: MutableList<GuildConfig>
 
-data class QGuild(
-        val config: GuildConfig,
-        val guild: Guild
-) {
-    fun getQuestion(id: Int) = config.questions.first { it.id == id }
+fun guildFromId(id: String?): GuildConfig {
+    return guilds.first { it.guildSnowflake == id }
 }
 
 @Service
 open class ConfigService(val config: BotConfig, private val discord: Discord, private val store: PersistenceService) {
+    init {
+        guilds = config.guilds
+    }
 
     fun setAdminRole(guild: String, role: String) {
         getGuild(guild).config.minRoleName = role
@@ -31,13 +28,13 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
         save()
     }
 
-    fun getGuild(guild: String) = QGuild(
+    fun getGuild(guild: String) = GuildImpl(
             guild = discord.jda.getGuildById(guild)!!,
-            config = getConfig(guild)
+            config = guildFromId(guild)
     )
 
     fun setChannel(name: LogChannels, guild: String, channel: TextChannelImpl) {
-        val settings = getConfig(guild).channels
+        val settings = guildFromId(guild).channels
 
         when (name) {
             LogChannels.ANSWER -> settings.answers = channel.id
@@ -49,7 +46,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
     }
 
     fun enableLogging(guild: String, enabled: Boolean) {
-        getConfig(guild).loggingEnabled = enabled
+        guildFromId(guild).loggingEnabled = enabled
         save()
     }
 

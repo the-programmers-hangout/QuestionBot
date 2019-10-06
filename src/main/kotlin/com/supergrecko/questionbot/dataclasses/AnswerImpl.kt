@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.User
  * @property questionId the id of the question that is being answered
  * @property text the text content of the answer
  */
-data class AnswerDetails(
+data class AnswerImpl(
         var sender: User,
         var questionId: Int = 0,
         var text: String = ""
