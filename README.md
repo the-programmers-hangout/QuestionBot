@@ -10,6 +10,7 @@ All the documentation for QuestionBot can be found inside the [docs](/docs) fold
 
 **Table of Contents**
 
+- [bot setup](/docs/discord-setup.md): How to setup required accounts for the bot
 - [development](/docs/development.md): How to develop the bot locally
 - [deployment](/docs/deployment.md): How to deploy the bot via Docker
 - [commands-ask](/docs/commands-ask.md): The ask command list
