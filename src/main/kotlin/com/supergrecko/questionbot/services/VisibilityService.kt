@@ -3,7 +3,7 @@ package com.supergrecko.questionbot.services
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.api.dsl.Command
+import me.aberrantfox.kjdautils.api.dsl.command.Command
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.toMember
 import net.dv8tion.jda.api.entities.Guild

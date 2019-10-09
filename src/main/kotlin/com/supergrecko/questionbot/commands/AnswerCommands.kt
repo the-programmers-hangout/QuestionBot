@@ -8,8 +8,8 @@ import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.tools.Arguments
-import me.aberrantfox.kjdautils.api.dsl.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.command.CommandSet
+import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.api.dsl.respond
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 
@@ -19,13 +19,9 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         description = "Answer a question"
         permission = PermissionLevel.EVERYONE
 
-        expect(QuestionArg, SentenceArg)
-
-        execute {
-            val args = Arguments(it.args)
-            // These will always exist
-            val question = args.asType<Question>(0)
-            val answer = args.asType<String>(1)
+        execute(QuestionArg, SentenceArg) {
+            val question = it.args.first
+            val answer = it.args.second
 
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerImpl(it.author, question.id, answer)
@@ -46,12 +42,9 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         description = "Edit an answer to a question"
         permission = PermissionLevel.EVERYONE
 
-        expect(QuestionArg, SentenceArg)
-
-        execute {
-            val args = Arguments(it.args)
-            val question = args.asType<Question>(0)
-            val answer = args.asType<String>(1)
+        execute(QuestionArg, SentenceArg) {
+            val question = it.args.first
+            val answer = it.args.second
             val details = AnswerImpl(it.author, question.id, answer)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
@@ -67,11 +60,8 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         description = "Delete an answer to a question"
         permission = PermissionLevel.EVERYONE
 
-        expect(QuestionArg)
-
-        execute {
-            val args = Arguments(it.args)
-            val question = args.asType<Question>(0)
+        execute(QuestionArg) {
+            val question = it.args.first
             val details = AnswerImpl(it.author, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
@@ -87,11 +77,8 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         description = "List answers to a given question"
         permission = PermissionLevel.EVERYONE
 
-        expect(QuestionArg)
-
-        execute {
-            val args = Arguments(it.args)
-            val question = args.asType<Question>(0)
+        execute(QuestionArg) {
+            val question = it.args.first
             val state = config.getGuild(it.guild!!.id)
 
             if (state.getQuestion(question.id).responses.size == 0) {

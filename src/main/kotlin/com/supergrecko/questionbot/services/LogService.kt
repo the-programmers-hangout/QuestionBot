@@ -1,7 +1,7 @@
 package com.supergrecko.questionbot.services
 
 import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.api.dsl.CommandEvent
+import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import net.dv8tion.jda.api.entities.TextChannel
 import me.aberrantfox.kjdautils.api.dsl.embed
 import java.awt.Color
@@ -9,7 +9,7 @@ import java.awt.Color
 @Service
 class LogService(val config: ConfigService) {
 
-    fun log(event: CommandEvent) {
+    fun log(event: CommandEvent<*>) {
         val state = config.getGuild(event.guild!!.id)
 
         if (!state.config.loggingEnabled) {
@@ -19,7 +19,7 @@ class LogService(val config: ConfigService) {
         getChannel(event)?.sendMessage(createEmbed(event))?.queue()
     }
 
-    private fun createEmbed(event: CommandEvent) = embed {
+    private fun createEmbed(event: CommandEvent<*>) = embed {
         val link = "https://discordapp.com/channels/${event.guild?.id}/${event.channel.id}/${event.message.id}"
 
         color = Color(0xfb8c00)
@@ -40,7 +40,7 @@ class LogService(val config: ConfigService) {
         }
     }
 
-    private fun getChannel(event: CommandEvent): TextChannel? {
+    private fun getChannel(event: CommandEvent<*>): TextChannel? {
         val state = config.getGuild(event.guild!!.id)
 
         return event.guild!!.jda.getTextChannelById(state.config.channels.logs)

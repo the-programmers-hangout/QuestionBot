@@ -26,17 +26,19 @@ fun main(args: Array<String>) {
 
             reactToCommands = false
 
-            mentionEmbed = embed {
-                val self = discord.jda.selfUser
+            mentionEmbed = { event ->
+                 embed {
+                    val self = discord.jda.selfUser
 
-                color = Color(0xfb8c00)
-                thumbnail = self.effectiveAvatarUrl
+                    color = Color(0xfb8c00)
+                    thumbnail = self.effectiveAvatarUrl
 
-                addField(self.fullName(), "QuestionBot")
+                    addField(self.fullName(), "QuestionBot")
 
-                addInlineField("Prefix", config.prefix)
-                addInlineField("Version", project.version)
-                addInlineField("Source", project.repository)
+                    addInlineField("Prefix", config.prefix)
+                    addInlineField("Version", project.version)
+                    addInlineField("Source", project.repository)
+                }
             }
         }
     }

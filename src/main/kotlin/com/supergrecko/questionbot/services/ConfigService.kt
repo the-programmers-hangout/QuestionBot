@@ -8,6 +8,7 @@ import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.internal.di.PersistenceService
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 private lateinit var guilds: MutableList<GuildConfig>
@@ -33,7 +34,7 @@ open class ConfigService(val config: BotConfig, private val discord: Discord, pr
             config = guildFromId(guild)
     )
 
-    fun setChannel(name: LogChannels, guild: String, channel: TextChannelImpl) {
+    fun setChannel(name: LogChannels, guild: String, channel: TextChannel) {
         val settings = guildFromId(guild).channels
 
         when (name) {

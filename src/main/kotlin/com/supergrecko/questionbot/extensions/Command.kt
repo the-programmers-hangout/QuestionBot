@@ -1,6 +1,6 @@
 package com.supergrecko.questionbot.extensions
 
-import me.aberrantfox.kjdautils.api.dsl.Command
+import me.aberrantfox.kjdautils.api.dsl.command.Command
 
 /**
  * Global map to keep track of Command to Permission levels

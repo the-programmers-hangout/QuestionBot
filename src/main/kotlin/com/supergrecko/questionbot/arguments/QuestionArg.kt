@@ -1,7 +1,8 @@
 package com.supergrecko.questionbot.arguments
 
+import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.services.guildFromId
-import me.aberrantfox.kjdautils.api.dsl.CommandEvent
+import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType
 import me.aberrantfox.kjdautils.internal.command.ConsumptionType
@@ -14,7 +15,7 @@ import me.aberrantfox.kjdautils.internal.command.ConsumptionType
  * @property examples list of example values
  * @property consumptionType single consumption type
  */
-open class QuestionArg(override val name: String = "Question") : ArgumentType {
+open class QuestionArg(override val name: String = "Question") : ArgumentType<Question>() {
     companion object : QuestionArg()
 
     override val examples: ArrayList<String> = arrayListOf("1", "23", "16")
@@ -28,7 +29,7 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
      * @param args the other arguments
      * @param event the command invocation
      */
-    override fun convert(arg: String, args: List<String>, event: CommandEvent): ArgumentResult {
+    override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Question> {
         val config = guildFromId(event.guild?.id)
 
         // Gets the first question with that id
@@ -36,6 +37,6 @@ open class QuestionArg(override val name: String = "Question") : ArgumentType {
 
         return if (question == null)
             ArgumentResult.Error("Question with id (${arg}) does not exist in this guild.") else
-            ArgumentResult.Single(question)
+            ArgumentResult.Success(question)
     }
 }
