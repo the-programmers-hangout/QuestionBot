@@ -10,9 +10,8 @@ import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.dataclasses.LogChannels
 import com.supergrecko.questionbot.services.QuestionService
 import com.supergrecko.questionbot.tools.Arguments
-import me.aberrantfox.kjdautils.api.dsl.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.arg
-import me.aberrantfox.kjdautils.api.dsl.commands
+import me.aberrantfox.kjdautils.api.dsl.command.CommandSet
+import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Message
@@ -27,12 +26,8 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Set the lowest required role to invoke commands."
         permission = PermissionLevel.ADMIN
 
-        expect(RoleArg)
-
-        execute {
-            // These will always exist
-            val args = Arguments(it.args)
-            val role = args.asType<RoleImpl>(0)
+        execute(RoleArg) {
+            val role = it.args.first
             config.setAdminRole(it.guild!!.id, role.name)
 
             it.respond("Success, the minimum required role to invoke admin commands was set to `${role.name}`.")
@@ -43,10 +38,8 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Sets the bot prefix."
         permission = PermissionLevel.ADMIN
 
-        expect(WordArg)
-
-        execute {
-            val prefix = it.args.first() as String
+        execute(WordArg) {
+            val prefix = it.args.first
             questions.setPrefix(prefix, it.guild!!)
 
             it.respond("Success, the bot prefix has been set to `$prefix`.")
@@ -57,13 +50,10 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Sets the output channel for the given argument."
         permission = PermissionLevel.ADMIN
 
-        expect(ChoiceArg("ChoiceArg", "log", "questions", "answers", "replyto"), TextChannelArg)
-
-        execute {
-            val args = Arguments(it.args)
+        execute(ChoiceArg("type", "log", "questions", "answers"), TextChannelArg) {
             // These will always exist
-            val command = args.asType<String>(0)
-            val channel = args.asType<TextChannelImpl>(1)
+            val command = it.args.first
+            val channel = it.args.second
 
             when (command) {
                 "log" -> config.setChannel(LogChannels.LOG, it.guild?.id!!, channel)
@@ -82,13 +72,8 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Enables / Disables bot logging"
         permission = PermissionLevel.ADMIN
 
-        expect(ChoiceArg("ChoiceArg", "on", "off"))
-
-        execute {
-            // These will always exist
-            val args = Arguments(it.args)
-            val param = args.asType<String>(0)
-
+        execute(ChoiceArg("state", "on", "off")) {
+            val param = it.args.first
             config.enableLogging(it.guild?.id!!, param == "on")
 
             it.respond("Success, logging settings have successfully been updated.")
@@ -99,13 +84,9 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Delete an answer from a question."
         permission = PermissionLevel.ADMIN
 
-        expect(QuestionArg, UserArg)
-
-        execute {
-            val args = Arguments(it.args)
-            // These will always exist
-            val question = args.asType<Question>(0)
-            val user = args.asType<User>(1)
+        execute(QuestionArg, UserArg) {
+            val question = it.args.first
+            val user = it.args.second
             val details = AnswerImpl(user, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
@@ -121,14 +102,11 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Manually add an already existing message as a reply to a question"
         permission = PermissionLevel.ADMIN
 
-        expect(QuestionArg, UserArg, SentenceArg)
+        execute(QuestionArg, UserArg, SentenceArg) {
+            val question = it.args.first
+            val user = it.args.second
+            val answer = it.args.third
 
-        execute {
-            val args = Arguments(it.args)
-            // These will always exist
-            val question = args.asType<Question>(0)
-            val user = args.asType<User>(1)
-            val answer = args.asType<String>(2)
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerImpl(user, question.id, answer)
 
@@ -148,13 +126,10 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Converts an existing message to a QuestionBot answer"
         permission = PermissionLevel.ADMIN
 
-        expect(QuestionArg, MessageArg, TextChannelArg)
-
-        execute {
-            val args = Arguments(it.args)
-            val question = args.asType<Question>(0)
-            val messageId = args.asType<Message>(1)
-            val channel = args.asType<TextChannel>(2)
+        execute(QuestionArg, MessageArg, TextChannelArg) {
+            val question = it.args.first
+            val messageId = it.args.second
+            val channel = it.args.third
 
             channel.retrieveMessageById(messageId.id).queue { message ->
                 val details = AnswerImpl(message.author, question.id, message.contentRaw)
@@ -172,13 +147,10 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         description = "Converts an existing message to a QuestionBot question"
         permission = PermissionLevel.ADMIN
 
-        expect(arg(MessageArg), arg(TextChannelArg), arg(SentenceArg, optional = true, default = ""))
-
-        execute {
-            val args = Arguments(it.args)
-            val messageId = args.asType<Message>(0)
-            val channel = args.asType<TextChannel>(1)
-            val note = args.asType<String>(2)
+        execute(MessageArg, TextChannelArg, SentenceArg.makeOptional("")) {
+            val messageId = it.args.first
+            val channel = it.args.second
+            val note = it.args.third
             val state = config.getGuild(it.guild?.id!!)
 
             channel.retrieveMessageById(messageId.id).queue { message ->
