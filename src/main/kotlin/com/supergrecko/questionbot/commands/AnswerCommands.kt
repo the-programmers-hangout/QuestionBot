@@ -2,12 +2,10 @@ package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.AnswerImpl
-import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
-import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.command.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.api.dsl.respond
@@ -20,8 +18,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         permission = PermissionLevel.EVERYONE
 
         execute(QuestionArg, SentenceArg) {
-            val question = it.args.first
-            val answer = it.args.second
+            val (question, answer) = it.args
 
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerImpl(it.author, question.id, answer)
@@ -43,8 +40,7 @@ fun answerCommands(config: ConfigService, answerService: AnswerService) = comman
         permission = PermissionLevel.EVERYONE
 
         execute(QuestionArg, SentenceArg) {
-            val question = it.args.first
-            val answer = it.args.second
+            val (question, answer) = it.args
             val details = AnswerImpl(it.author, question.id, answer)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {

@@ -33,18 +33,17 @@ fun questionCommands(config: ConfigService, questionService: QuestionService) = 
         permission = PermissionLevel.ADMIN
 
         execute(ChoiceArg("action", "edit", "delete"), QuestionArg, SplitterArg.makeOptional(listOf("|"))) {
+            val id = it.args.second
+
             when (it.args.first) {
                 "edit" -> {
-                    val id = it.args.second
                     val (question, note) = it.args.third
 
-                    questionService.editQuestion(it.guild!!, id.id, question ?: "No question was asked.", note ?: "")
+                    questionService.editQuestion(it.guild!!, id.id, question, note)
 
                     it.respond("Question #${id.id} has been edited.")
                 }
                 "delete" -> {
-                    val id = it.args.second
-
                     questionService.deleteQuestion(it.guild!!, id.id) {
                         it.respond("Question #${id.id} could not be found.")
 
