@@ -2,23 +2,16 @@ package com.supergrecko.questionbot.commands
 
 import com.supergrecko.questionbot.arguments.QuestionArg
 import com.supergrecko.questionbot.dataclasses.AnswerImpl
-import com.supergrecko.questionbot.dataclasses.Question
 import com.supergrecko.questionbot.extensions.PermissionLevel
 import com.supergrecko.questionbot.extensions.permission
 import com.supergrecko.questionbot.services.AnswerService
 import com.supergrecko.questionbot.services.ConfigService
 import com.supergrecko.questionbot.dataclasses.LogChannels
 import com.supergrecko.questionbot.services.QuestionService
-import com.supergrecko.questionbot.tools.Arguments
 import me.aberrantfox.kjdautils.api.dsl.command.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import me.aberrantfox.kjdautils.internal.arguments.*
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
-import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.internal.entities.RoleImpl
-import net.dv8tion.jda.internal.entities.TextChannelImpl
 
 @CommandSet("Configure")
 fun manageCommands(config: ConfigService, questions: QuestionService, answerService: AnswerService) = commands {
@@ -85,8 +78,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         permission = PermissionLevel.ADMIN
 
         execute(QuestionArg, UserArg) {
-            val question = it.args.first
-            val user = it.args.second
+            val (question, user) = it.args
             val details = AnswerImpl(user, question.id)
 
             if (answerService.questionAnsweredByUser(it.guild!!, details)) {
@@ -103,9 +95,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         permission = PermissionLevel.ADMIN
 
         execute(QuestionArg, UserArg, SentenceArg) {
-            val question = it.args.first
-            val user = it.args.second
-            val answer = it.args.third
+            val (question, user, answer) = it.args
 
             val state = config.getGuild(it.guild?.id!!)
             val details = AnswerImpl(user, question.id, answer)
@@ -127,12 +117,11 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         permission = PermissionLevel.ADMIN
 
         execute(QuestionArg, MessageArg, TextChannelArg) {
-            val question = it.args.first
-            val messageId = it.args.second
-            val channel = it.args.third
+            val (question, messageId, channel) = it.args
 
             channel.retrieveMessageById(messageId.id).queue { message ->
                 val details = AnswerImpl(message.author, question.id, message.contentRaw)
+
                 if (answerService.questionAnsweredByUser(it.guild!!, details)) {
                     it.respond("User ${message.author.fullName()} has already submitted an answer for Question ${question.id}.")
                 } else {
@@ -148,9 +137,7 @@ fun manageCommands(config: ConfigService, questions: QuestionService, answerServ
         permission = PermissionLevel.ADMIN
 
         execute(MessageArg, TextChannelArg, SentenceArg.makeOptional("")) {
-            val messageId = it.args.first
-            val channel = it.args.second
-            val note = it.args.third
+            val (messageId, channel, note) = it.args
             val state = config.getGuild(it.guild?.id!!)
 
             channel.retrieveMessageById(messageId.id).queue { message ->
